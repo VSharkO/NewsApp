@@ -10,13 +10,18 @@ import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
+        window = UIWindow(frame: UIScreen.main.bounds)
+        let tableViewController = MainViewController()
+        let navigationController = UINavigationController(rootViewController: tableViewController)
+        if let rootWindow = window{
+            rootWindow.rootViewController = navigationController
+            rootWindow.makeKeyAndVisible()
+            return true
+        }else{        
+            return false
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
