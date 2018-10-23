@@ -18,10 +18,6 @@ class MainPresenterImpl : MainPresenter,Interactor{
         self.view = view
     }
     
-    //    func getDataFromRepository() -> [Article] {
-    //        return fakeRepository
-    //    }
-    
     func getSingleNewsFromRepository(index: Int) -> Article {
         return fakeRepository[index]
     }
@@ -34,11 +30,9 @@ class MainPresenterImpl : MainPresenter,Interactor{
             }
         }
     }
-    
-    // KONSTANTE??
-    
+  
     func getResponseFromUrl(){
-        getDataFromURL(link: "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=6946d0c07a1c4555a4186bfcade76398") { (success, data, error) in
+        getDataFromURL(link: Constants.url) { (success, data, error) in
             if success{
                 if let responseData = data{
                     do{

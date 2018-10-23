@@ -11,10 +11,12 @@ import UIKit
 struct Article: Codable {
     let title : String
     let urlToImage : String
+    let description : String
     
-    init(title: String, image: String) {
+    init(title: String, image: String, description : String) {
         self.title = title
         self.urlToImage = image
+        self.description = description
     }
 }
 
