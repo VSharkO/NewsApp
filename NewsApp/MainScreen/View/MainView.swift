@@ -10,4 +10,6 @@ import Foundation
 
 protocol MainView: class{
     func reloadData()
+    func hideSpinner()
+    func showSpinner()
 }

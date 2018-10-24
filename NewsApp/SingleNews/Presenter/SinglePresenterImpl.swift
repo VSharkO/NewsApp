@@ -21,7 +21,6 @@ class SinglePresenterImpl : SinglePresenter, Interactor{
         if data == nil{
             getDataFromRepository()
         }
-        
         view.showSpinner()
     }
     
@@ -31,7 +30,10 @@ class SinglePresenterImpl : SinglePresenter, Interactor{
                 return
             }
             if success{
+                strongSelf.view?.hideSpinner()
                 response(true,data,error)
+                
+            }else{
                 strongSelf.view?.hideSpinner()
             }
         }
@@ -47,19 +49,28 @@ class SinglePresenterImpl : SinglePresenter, Interactor{
     }
     
     func getDataFromRepository(){
-            fakeRepository.getResponseFromUrl { [weak self](success, arrayOfArticles, error) in
-                guard let strongSelf = self else{
-                    return
-                }
-                if(success){
-                    if let articles = arrayOfArticles{
-                        strongSelf.data = articles
-                        if let index = strongSelf.index{
-                            strongSelf.fillViewWithData(index: index)
-                        }
-                    }
-                }
-            }
+        self.data = FakeDatabase.database
+        if let index = self.index{
+            fillViewWithData(index: index)
+        }
     }
+    
+//    func getDataFromRepository(){
+//            fakeRepository.getResponseFromUrl { [weak self](success, arrayOfArticles, error) in
+//                guard let strongSelf = self else{
+//                    return
+//                }
+//                if(success){
+//                    if let articles = arrayOfArticles{
+//                        strongSelf.data = articles
+//                        if let index = strongSelf.index{
+//                            strongSelf.fillViewWithData(index: index)
+//                        }
+//                    }
+//                }
+//            }
+//    }
+    
+    
     
 }

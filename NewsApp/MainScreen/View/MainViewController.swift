@@ -17,7 +17,6 @@ class MainViewController: UITableViewController,MainView{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter = MainPresenterImpl(view: self)
-//        spinner = UIViewController.displaySpinner(onView: self.view)
         registerCells()
         setupNavigationBar()
     }
@@ -72,6 +71,16 @@ class MainViewController: UITableViewController,MainView{
     
     func reloadData(){
         self.tableView.reloadData()
+    }
+    
+    func showSpinner(){
+        spinner = UIViewController.displaySpinner(onView: self.view)
+    }
+    
+    func hideSpinner(){
+        if let spinika = spinner{
+            UIViewController.removeSpinner(spinner: spinika)
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
