@@ -10,8 +10,8 @@ import UIKit
 
 protocol MainPresenter{
     
-    func getSingleNewsFromRepository(index: Int) -> Article
-    func getResponseFromUrl()
-    func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void)
+    func getSingleNews(index: Int) -> Article?
+    func getDataFromRepository()
+    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,UIImage?,Error?) -> Void)
     func getNumberOfItems() -> Int
 }

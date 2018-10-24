@@ -17,13 +17,13 @@ class MainViewController: UITableViewController,MainView{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter = MainPresenterImpl(view: self)
-        spinner = UIViewController.displaySpinner(onView: self.view)
-        presenter?.getResponseFromUrl()
+//        spinner = UIViewController.displaySpinner(onView: self.view)
         registerCells()
         setupNavigationBar()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -43,30 +43,27 @@ class MainViewController: UITableViewController,MainView{
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell,
-            let news = presenter?.getSingleNewsFromRepository(index: indexPath.row){
-            cell.setTitle(title: news.title)
-            presenter?.getPictureFromUrl(url: news.urlToImage, response: { (success, data, error) in
-                if let picture = UIImage(data: data as! Data){
-                    if(success){
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
+            
+            if let newsTitle = presenter?.getSingleNews(index: indexPath.row)?.title{
+                cell.setTitle(title: newsTitle)
+            }
+            
+            presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, immage, error) in
+                if(success){
+                    if let picture = immage{
                         cell.setPicture(image: picture)
-                        if(self.loadedImagesCounter == FakeRepository.articles.count-1){
-                            self.loadedImagesCounter = 0
-                            UIViewController.removeSpinner(spinner: self.spinner!)
-                        }else{
-                            self.loadedImagesCounter += 1
-                        }
-                    }else{
-                        UIViewController.removeSpinner(spinner: self.spinner!)
                     }
+                }else{
+                    print("somethings wrong with picture")
                 }
             })
-            
             return cell
         }
         else{
             return TableViewCell()
         }
+        
     }
     
     func setupNavigationBar(){

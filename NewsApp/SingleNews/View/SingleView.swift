@@ -12,4 +12,6 @@ protocol SingleView: class{
     func setImage(imageURL: String)
     func setTitle(title: String)
     func setDescription(description: String)
+    func hideSpinner()
+    func showSpinner()
 }

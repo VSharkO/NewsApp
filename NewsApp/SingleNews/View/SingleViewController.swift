@@ -14,39 +14,9 @@ class SingleViewController: UIViewController, SingleView{
     var presenter: SinglePresenter? = nil
     var spinner : UIView?
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.addSubview(rootView)
-        rootView.addSubview(photoImageView)
-        rootView.addSubview(titleLabel)
-        rootView.addSubview(descriptionLabel)
-        spinner = UIViewController.displaySpinner(onView: self.view)
-        setupConstraints()
-    }
-    
-    init(index: Int?) {
-        super.init(nibName: nil, bundle: nil)
-        self.index = index ?? nil
-        presenter = SinglePresenterImpl(view: self)
-        if let numberOfArticle = index{
-            presenter?.getSingleNewsFromRepository(index: numberOfArticle)
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        view.setNeedsLayout()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     let rootView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .white
         return view
     }()
     
@@ -75,6 +45,26 @@ class SingleViewController: UIViewController, SingleView{
         descriptionText.translatesAutoresizingMaskIntoConstraints = false
         return descriptionText
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        setupConstraints()
+    }
+    
+    init(index: Int?) {
+        super.init(nibName: nil, bundle: nil)
+        presenter = SinglePresenterImpl(view: self, index: index)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.setNeedsLayout()
+    }
     
     func setupConstraints(){
         NSLayoutConstraint.activate([
@@ -105,23 +95,42 @@ class SingleViewController: UIViewController, SingleView{
             ])
     }
     
+    func setupViews(){
+        self.view.backgroundColor = .white
+        self.view.addSubview(rootView)
+        rootView.addSubview(photoImageView)
+        rootView.addSubview(titleLabel)
+        rootView.addSubview(descriptionLabel)
+    }
+    
     func setImage(imageURL: String){
-        presenter?.getPictureFromUrl(url: imageURL, response: { (success, data, error) in
+        presenter?.getPictureFromUrl(url: imageURL, response: { [weak self] (success, data, error) in
+            guard let strongSelf = self else{
+                return
+            }
             if success{
                 if let image = data,let picture = UIImage(data: image as! Data){
-                    self.photoImageView.image = picture
-                    UIViewController.removeSpinner(spinner: self.spinner!)
+                    strongSelf.photoImageView.image = picture
                 }
-            }else{
-                UIViewController.removeSpinner(spinner: self.spinner!)
             }
         })
+    }
+    
+    func showSpinner(){
+        spinner = UIViewController.displaySpinner(onView: self.view)
+    }
+    
+    func hideSpinner(){
+        if let spinika = spinner{
+            UIViewController.removeSpinner(spinner: spinika)
+        }
     }
     
     func setTitle(title: String){
         titleLabel.text = title
         navigationItem.title = title
     }
+    
     
     func setDescription(description: String){
         descriptionLabel.text = description

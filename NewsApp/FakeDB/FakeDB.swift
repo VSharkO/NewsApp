@@ -1,5 +1,5 @@
 //
-//  SinglePresenter.swift
+//  FakeDB.swift
 //  NewsApp
 //
 //  Created by Valentin Šarić on 24/10/2018.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol SinglePresenter{
-    func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void)
+struct FakeDatabase{
+    static var database: [Article]? = nil
 }

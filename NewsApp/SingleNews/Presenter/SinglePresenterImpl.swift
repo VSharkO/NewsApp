@@ -9,36 +9,57 @@
 import Foundation
 
 class SinglePresenterImpl : SinglePresenter, Interactor{
-    
+ 
+    var fakeRepository = FakeRepository()
     weak var view: SingleView? = nil
-    var fakeRepository : Article? = nil
+    var data : [Article]? = nil
+    var index : Int? = nil
     
-    init(view: SingleView) {
+    init(view: SingleView, index: Int?) {
         self.view = view
-    }
-    
-    func getSingleNewsFromRepository(index: Int) {
-        self.fakeRepository = FakeRepository.articles[index]
-        fillViewWithData()
+        self.index = index
+        if data == nil{
+            getDataFromRepository()
+        }
+        
+        view.showSpinner()
     }
     
     func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void){
-        //Interactor protocol function -- pitanje
-        getDataFromURL(link: url) { (success, data, error) in
+        getDataFromURL(link: url) { [weak self](success, data, error) in
+            guard let strongSelf = self else{
+                return
+            }
             if success{
                 response(true,data,error)
+                strongSelf.view?.hideSpinner()
             }
         }
     }
     
-    func fillViewWithData(){
-        guard let article = fakeRepository else{
-            print("Cannot fill singleView with nil value of fakeRepository")
+    func fillViewWithData(index: Int){
+        guard let article = data?[index] else{
             return
         }
         view?.setImage(imageURL: article.urlToImage)
         view?.setTitle(title: article.title)
         view?.setDescription(description: article.description)
+    }
+    
+    func getDataFromRepository(){
+            fakeRepository.getResponseFromUrl { [weak self](success, arrayOfArticles, error) in
+                guard let strongSelf = self else{
+                    return
+                }
+                if(success){
+                    if let articles = arrayOfArticles{
+                        strongSelf.data = articles
+                        if let index = strongSelf.index{
+                            strongSelf.fillViewWithData(index: index)
+                        }
+                    }
+                }
+            }
     }
     
 }
