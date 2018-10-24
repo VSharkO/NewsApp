@@ -6,12 +6,12 @@
 //  Copyright © 2018 Valentin Šarić. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class MainPresenterImpl : MainPresenter,Interactor{
     
     var fakeResponse: Data? = nil
-    var fakeRepository : [Article] = []
+//    var fakeRepository : [Article] = []
     
     weak var view : MainView?
     init(view : MainView) {
@@ -19,7 +19,7 @@ class MainPresenterImpl : MainPresenter,Interactor{
     }
     
     func getSingleNewsFromRepository(index: Int) -> Article {
-        return fakeRepository[index]
+        return FakeRepository.articles[index]
     }
     
     func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void){
@@ -37,11 +37,10 @@ class MainPresenterImpl : MainPresenter,Interactor{
                 if let responseData = data{
                     do{
                         let decoder = try JSONDecoder().decode(Response.self, from: responseData)
-                        self.fakeRepository = decoder.articles
+                        FakeRepository.articles = decoder.articles
                         self.view?.reloadData()
-                        print (self.fakeRepository)
                     }catch{
-                        print("nevalja nešto")
+                        print("something went wrong with downloading Articles data")
                     }
                 }
             }
@@ -49,7 +48,7 @@ class MainPresenterImpl : MainPresenter,Interactor{
     }
     
     func getNumberOfItems() -> Int {
-        return fakeRepository.count
+        return FakeRepository.articles.count
     }
     
 }

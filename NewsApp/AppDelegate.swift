@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tableViewController = SingleViewController()
+        let tableViewController = MainViewController()
         let navigationController = UINavigationController(rootViewController: tableViewController)
         if let rootWindow = window{
             rootWindow.rootViewController = navigationController
