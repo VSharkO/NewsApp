@@ -103,17 +103,8 @@ class SingleViewController: UIViewController, SingleView{
         rootView.addSubview(descriptionLabel)
     }
     
-    func setImage(imageURL: String){
-        presenter?.getPictureFromUrl(url: imageURL, response: { [weak self] (success, data, error) in
-            guard let strongSelf = self else{
-                return
-            }
-            if success{
-                if let image = data,let picture = UIImage(data: image as! Data){
-                    strongSelf.photoImageView.image = picture
-                }
-            }
-        })
+    func setImage(image: Data){
+        photoImageView.image = UIImage(data: image)
     }
     
     func showSpinner(){

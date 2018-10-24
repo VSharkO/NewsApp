@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SingleView: class{
-    func setImage(imageURL: String)
+    func setImage(image: Data)
     func setTitle(title: String)
     func setDescription(description: String)
     func hideSpinner()
