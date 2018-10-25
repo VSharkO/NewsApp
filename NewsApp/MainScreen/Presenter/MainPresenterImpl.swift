@@ -6,7 +6,7 @@
 //  Copyright © 2018 Valentin Šarić. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class MainPresenterImpl : MainPresenter{
 
@@ -24,23 +24,21 @@ class MainPresenterImpl : MainPresenter{
         return data
     }
     
-    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,Data?,Error?) -> Void){
+    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,UIImage,Error?) -> Void){
             articleRepository.getPictureFromUrl(url: data[forArticleAtIndex].urlToImage) { [weak self](success,data,error) in
                 guard let strongSelf = self else{
                     return
                 }
                 if(success){
-                    if let anyAsData = data as? Data{ //ovaj UIImage? ok ili da bude data pa da view datu prebaci u UIImage?
-                        response(true,anyAsData,nil)
+                        response(true,data,nil)
                         
                         if(!strongSelf.checkIfAllImagesAreLoaded()){
                             strongSelf.numberOfLoadedImages += 1
                         }else{
                             strongSelf.view?.hideSpinner()
                         }
-                    }
+                    
                 }else{
-                    response(false,nil,nil)
                     strongSelf.view?.hideSpinner()
                 }
             }

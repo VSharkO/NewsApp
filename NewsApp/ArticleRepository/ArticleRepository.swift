@@ -6,7 +6,7 @@
 //  Copyright © 2018 Valentin Šarić. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class ArticleRepository: Interactor{
  
@@ -25,10 +25,13 @@ class ArticleRepository: Interactor{
         }
     }
     
-    func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void){
+    func getPictureFromUrl(url: String, response: @escaping (Bool,UIImage,Error?) -> Void){
         getDataFromURL(link: url) { (success, data, error) in
             if success{
-                response(true,data,error)
+                if let image = UIImage(data: data!){
+                    response(true,image,error)
+                }
+                
             }
         }
     }

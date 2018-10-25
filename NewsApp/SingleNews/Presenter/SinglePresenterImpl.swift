@@ -42,12 +42,13 @@ class SinglePresenterImpl : SinglePresenter, Interactor{
             if success{
                 if let imageData = pictureData as? Data{
                     strongSelf.view.setImage(image: imageData)
+                    strongSelf.view.hideSpinner()
                 }
             }
         }
 
         view.setTitle(title: article.title)
         view.setDescription(description: article.description)
-        view.hideSpinner()
+        
     }
 }

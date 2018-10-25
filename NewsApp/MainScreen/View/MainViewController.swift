@@ -36,12 +36,7 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
             cell.setTitle(title: presenter.getNews()[indexPath.row].title)
             presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, image, error) in
                 if(success){
-                    guard let pic = image else{
-                        return
-                    }
-                    if let picture = UIImage(data: pic){
-                        cell.setPicture(image: picture)
-                    }
+                    cell.setPicture(image: image)
                 }else{
                     print("somethings wrong with picture")
                 }
