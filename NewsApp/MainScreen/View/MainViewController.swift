@@ -42,9 +42,12 @@ class MainViewController: UITableViewController,MainView{
                 cell.setTitle(title: newsTitle)
             }
             
-            presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, immage, error) in
+            presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, image, error) in
                 if(success){
-                    if let picture = immage{
+                    guard let pic = image else{
+                        return
+                    }
+                    if let picture = UIImage(data: pic){
                         cell.setPicture(image: picture)
                     }
                 }else{

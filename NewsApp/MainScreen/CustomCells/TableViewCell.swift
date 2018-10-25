@@ -47,9 +47,13 @@ class TableViewCell: UITableViewCell{
             photo.topAnchor.constraint(equalTo: contentView.topAnchor),
             photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             photo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            photo.heightAnchor.constraint(equalToConstant: 100),
-            photo.widthAnchor.constraint(equalToConstant: 100)
+            photo.widthAnchor.constraint(equalTo: photo.heightAnchor, multiplier: 1.2)
             ])
+        let constraintPhotoHeight = photo.heightAnchor.constraint(equalToConstant: 100)
+        constraintPhotoHeight.priority = .init(999)
+        constraintPhotoHeight.isActive = true
+        
+        
         
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: contentView.topAnchor),

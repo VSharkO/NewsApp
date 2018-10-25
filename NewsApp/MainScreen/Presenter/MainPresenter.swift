@@ -6,12 +6,12 @@
 //  Copyright © 2018 Valentin Šarić. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 protocol MainPresenter{
     
     func getSingleNews(index: Int) -> Article?
     func getDataFromRepository()
-    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,UIImage?,Error?) -> Void)
+    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,Data?,Error?) -> Void)
     func getNumberOfItems() -> Int
 }
