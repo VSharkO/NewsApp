@@ -42,12 +42,13 @@ class TableViewCell: UITableViewCell{
     }
     
     func setupConstraints(){
+       
         NSLayoutConstraint.activate([
             photo.topAnchor.constraint(equalTo: contentView.topAnchor),
             photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             photo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            photo.heightAnchor.constraint(equalToConstant: 80),
-            photo.widthAnchor.constraint(equalToConstant: 120)
+            photo.heightAnchor.constraint(equalToConstant: 100),
+            photo.widthAnchor.constraint(equalToConstant: 100)
             ])
         
         NSLayoutConstraint.activate([

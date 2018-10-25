@@ -78,7 +78,7 @@ class SingleViewController: UIViewController, SingleView{
             photoImageView.topAnchor.constraint(equalTo: rootView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
-            photoImageView.heightAnchor.constraint(equalToConstant: 1/3 * self.view.frame.size.height)
+            photoImageView.heightAnchor.constraint(equalTo: self.rootView.heightAnchor, multiplier: 1/3)
             ])
         
         NSLayoutConstraint.activate([
@@ -95,7 +95,7 @@ class SingleViewController: UIViewController, SingleView{
             ])
     }
     
-    func setupViews(){
+    private func setupViews(){
         self.view.backgroundColor = .white
         self.view.addSubview(rootView)
         rootView.addSubview(photoImageView)

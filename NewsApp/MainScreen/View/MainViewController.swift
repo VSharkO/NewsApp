@@ -12,7 +12,6 @@ class MainViewController: UITableViewController,MainView{
     
     var presenter : MainPresenter?
     var spinner : UIView?
-    var loadedImagesCounter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,12 +35,7 @@ class MainViewController: UITableViewController,MainView{
         return count
     }
     
-    func registerCells(){
-        self.tableView.register(TableViewCell.self, forCellReuseIdentifier: "customeCell")
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
             
             if let newsTitle = presenter?.getSingleNews(index: indexPath.row)?.title{
@@ -65,7 +59,15 @@ class MainViewController: UITableViewController,MainView{
         
     }
     
-    func setupNavigationBar(){
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        moveToMealScreenWithIndex(clickedMeal: indexPath.row)
+    }
+    
+    private func registerCells(){
+        self.tableView.register(TableViewCell.self, forCellReuseIdentifier: "customeCell")
+    }
+    
+    private func setupNavigationBar(){
         navigationItem.title = "Factory"
     }
     
@@ -78,13 +80,9 @@ class MainViewController: UITableViewController,MainView{
     }
     
     func hideSpinner(){
-        if let spinika = spinner{
-            UIViewController.removeSpinner(spinner: spinika)
+        if let spin = spinner{
+            UIViewController.removeSpinner(spinner: spin)
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        moveToMealScreenWithIndex(clickedMeal: indexPath.row)
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){

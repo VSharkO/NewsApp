@@ -43,19 +43,19 @@ class SinglePresenterImpl : SinglePresenter, Interactor{
         guard let article = data?[index] else{
             return
         }
-        
+
         getPictureFromUrl(url: article.urlToImage) { [weak self](success, pictureData, error) in
             guard let strongSelf = self else{
                 return
             }
             if success{
-                //MARK zapeo tu, stari način ne radi jer je view ubio prezenter a bio je još jedan poziv na oprezenter umjesto da se ova logika za slike odmah pozvala ovdije
+                //MARK zapeo tu, stari način ne radi jer je view ubio prezenter a bio je još jedan poziv na prezenter umjesto da se ova logika za slike odmah pozvala ovdije
                 if let imageData = pictureData as? Data{//tu data ili UIImage?
                     strongSelf.view?.setImage(image: imageData)
                 }
             }
         }
-        
+
         view?.setTitle(title: article.title)
         view?.setDescription(description: article.description)
     }
