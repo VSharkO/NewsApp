@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MainViewController: UITableViewController,MainView{
+class MainViewController: UITableViewController,MainView,SpinnerManager{
     
-    var presenter : MainPresenter?
+    var presenter : MainPresenter!
     var spinner : UIView?
     
     override func viewDidLoad() {
@@ -21,7 +21,6 @@ class MainViewController: UITableViewController,MainView{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -29,19 +28,12 @@ class MainViewController: UITableViewController,MainView{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let count = presenter?.getNumberOfItems() else{
-            return 0
-        }
-        return count
+            return presenter.getNews().count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
-            
-            if let newsTitle = presenter?.getSingleNews(index: indexPath.row)?.title{
-                cell.setTitle(title: newsTitle)
-            }
-            
+            cell.setTitle(title: presenter.getNews()[indexPath.row].title)
             presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, image, error) in
                 if(success){
                     guard let pic = image else{
@@ -79,16 +71,16 @@ class MainViewController: UITableViewController,MainView{
     }
     
     func showSpinner(){
-        spinner = UIViewController.displaySpinner(onView: self.view)
+        spinner = displaySpinner(onView: self.view)
     }
     
     func hideSpinner(){
         if let spin = spinner{
-            UIViewController.removeSpinner(spinner: spin)
+            removeSpinner(spinner: spin)
         }
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){
-        navigationController?.pushViewController(SingleViewController(index: clickedMeal), animated: true)
+        navigationController?.pushViewController(SingleViewController(singleArticle: presenter.getNews()[clickedMeal]), animated: true)
     }
 }

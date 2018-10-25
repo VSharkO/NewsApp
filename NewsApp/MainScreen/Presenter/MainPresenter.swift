@@ -10,8 +10,7 @@ import Foundation
 
 protocol MainPresenter{
     
-    func getSingleNews(index: Int) -> Article?
+    func getNews() -> [Article]
     func getDataFromRepository()
     func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,Data?,Error?) -> Void)
-    func getNumberOfItems() -> Int
 }

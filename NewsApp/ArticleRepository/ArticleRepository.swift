@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FakeRepository: Interactor{
+class ArticleRepository: Interactor{
  
     func getResponseFromUrl(response: @escaping (Bool,[Article]?,Error?) -> Void){
         getDataFromURL(link: Constants.url) { (success, data, error) in

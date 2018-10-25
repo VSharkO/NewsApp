@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct FakeDatabase{
-    static var database: [Article]? = nil
+struct ArticleDatabase{
+//    static var database: [Article]? = nil
 }

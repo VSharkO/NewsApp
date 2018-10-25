@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SingleViewController: UIViewController, SingleView{
+class SingleViewController: UIViewController, SingleView, SpinnerManager{
     
     var index: Int? = nil
     var presenter: SinglePresenter? = nil
@@ -52,9 +52,9 @@ class SingleViewController: UIViewController, SingleView{
         setupConstraints()
     }
     
-    init(index: Int?) {
+    init(singleArticle: Article) {
         super.init(nibName: nil, bundle: nil)
-        presenter = SinglePresenterImpl(view: self, index: index)
+        presenter = SinglePresenterImpl(view: self, singleArticle: singleArticle)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -108,12 +108,12 @@ class SingleViewController: UIViewController, SingleView{
     }
     
     func showSpinner(){
-        spinner = UIViewController.displaySpinner(onView: self.view)
+        spinner = displaySpinner(onView: self.view)
     }
     
     func hideSpinner(){
-        if let spinika = spinner{
-            UIViewController.removeSpinner(spinner: spinika)
+        if let spin = spinner{
+            removeSpinner(spinner: spin)
         }
     }
     
@@ -121,7 +121,6 @@ class SingleViewController: UIViewController, SingleView{
         titleLabel.text = title
         navigationItem.title = title
     }
-    
     
     func setDescription(description: String){
         descriptionLabel.text = description

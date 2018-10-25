@@ -53,8 +53,6 @@ class TableViewCell: UITableViewCell{
         constraintPhotoHeight.priority = .init(999)
         constraintPhotoHeight.isActive = true
         
-        
-        
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: contentView.topAnchor),
             title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
