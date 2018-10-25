@@ -9,7 +9,7 @@
 import UIKit
 
 class ArticleRepository: Interactor{
- 
+    
     func getResponseFromUrl(response: @escaping (Bool,[Article]?,Error?) -> Void){
         getDataFromURL(link: Constants.url) { (success, data, error) in
             if success{
@@ -21,17 +21,6 @@ class ArticleRepository: Interactor{
                         print("something went wrong with downloading Articles data")
                     }
                 }
-            }
-        }
-    }
-    
-    func getPictureFromUrl(url: String, response: @escaping (Bool,UIImage,Error?) -> Void){
-        getDataFromURL(link: url) { (success, data, error) in
-            if success{
-                if let image = UIImage(data: data!){
-                    response(true,image,error)
-                }
-                
             }
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SingleViewController: UIViewController, SingleView, SpinnerManager{
     
@@ -73,7 +74,7 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
             rootView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
             rootView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
             ])
-
+        
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: rootView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
@@ -103,8 +104,9 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
         rootView.addSubview(descriptionLabel)
     }
     
-    func setImage(image: Data){
-        photoImageView.image = UIImage(data: image)
+    func setImage(imageUrl: String){
+        let url = URL(string: imageUrl)
+        photoImageView.kf.setImage(with: url)
     }
     
     func showSpinner(){
@@ -125,5 +127,5 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
     func setDescription(description: String){
         descriptionLabel.text = description
     }
-
+    
 }

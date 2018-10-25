@@ -7,37 +7,16 @@
 //
 
 import Foundation
+import Alamofire
 
 protocol Interactor{
-   func getDataFromURL(link: String, complition: @escaping (Bool,Data?,Error?) -> Void)
+    func getDataFromURL(link: String, complition: @escaping (Bool,Data?,Error?) -> Void)
 }
 
 extension Interactor{
-    
     func getDataFromURL(link: String, complition: @escaping (Bool,Data?,Error?) -> Void){
-        
-        let dataURL = URL(string: link)!
-        
-        let session = URLSession(configuration: .default)
-        
-        let downloadTask = session.dataTask(with: dataURL) { (data, response, error) in
-            if let e = error {
-                print("Error downloading data: \(e)")
-            } else {
-                if let res = response as? HTTPURLResponse {
-                    print("Downloaded data with response code \(res.statusCode)")
-                    if let downloadedData = data {
-                        DispatchQueue.main.async {
-                            complition(true,downloadedData,nil)
-                        }
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        complition(false,nil,nil)
-                    }
-                }
-            }
+        Alamofire.request(link).responseJSON { response in
+            complition(true, response.data, nil)
         }
-        downloadTask.resume()
     }
 }

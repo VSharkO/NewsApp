@@ -12,5 +12,4 @@ protocol MainPresenter{
     
     func getNews() -> [Article]
     func getDataFromRepository()
-    func getPictureFromRepository(forArticleAtIndex: Int, response: @escaping (Bool,UIImage,Error?) -> Void)
 }

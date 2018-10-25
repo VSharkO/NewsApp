@@ -28,19 +28,13 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return presenter.getNews().count
+        return presenter.getNews().count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
             cell.setTitle(title: presenter.getNews()[indexPath.row].title)
-            presenter?.getPictureFromRepository(forArticleAtIndex: indexPath.row, response: { (success, image, error) in
-                if(success){
-                    cell.setPicture(image: image)
-                }else{
-                    print("somethings wrong with picture")
-                }
-            })
+            cell.setPicture(url: presenter.getNews()[indexPath.row].urlToImage)
             return cell
         }
         else{

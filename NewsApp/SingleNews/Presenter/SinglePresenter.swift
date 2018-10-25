@@ -9,5 +9,4 @@
 import Foundation
 
 protocol SinglePresenter{
-    func getPictureFromUrl(url: String, response: @escaping (Bool,Any?,Error?) -> Void)
 }

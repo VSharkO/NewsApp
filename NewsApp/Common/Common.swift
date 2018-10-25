@@ -9,7 +9,7 @@
 import UIKit
 
 struct Constants{
-   static let url = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=6946d0c07a1c4555a4186bfcade76398"
+    static let url = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=6946d0c07a1c4555a4186bfcade76398"
 }
 
 protocol SpinnerManager{
@@ -18,6 +18,7 @@ protocol SpinnerManager{
 }
 
 extension SpinnerManager {
+    
     func displaySpinner(onView : UIView) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
         spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.8)

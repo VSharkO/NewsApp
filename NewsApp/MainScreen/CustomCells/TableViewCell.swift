@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class TableViewCell: UITableViewCell{
     
@@ -42,7 +43,7 @@ class TableViewCell: UITableViewCell{
     }
     
     func setupConstraints(){
-       
+        
         NSLayoutConstraint.activate([
             photo.topAnchor.constraint(equalTo: contentView.topAnchor),
             photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -65,8 +66,9 @@ class TableViewCell: UITableViewCell{
         self.title.text = title
     }
     
-    func setPicture(image: UIImage){
-        photo.image = image
+    func setPicture(url: String){
+        let url = URL(string: url)
+        photo.kf.setImage(with: url)
     }
     
 }
