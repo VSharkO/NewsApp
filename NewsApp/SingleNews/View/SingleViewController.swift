@@ -79,7 +79,7 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
             photoImageView.topAnchor.constraint(equalTo: rootView.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
-            photoImageView.heightAnchor.constraint(equalTo: self.rootView.heightAnchor, multiplier: 1/3)
+            photoImageView.heightAnchor.constraint(equalTo: self.rootView.heightAnchor, multiplier: 1/2.5)
             ])
         
         NSLayoutConstraint.activate([

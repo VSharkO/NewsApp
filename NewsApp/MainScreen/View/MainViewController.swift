@@ -12,12 +12,15 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
     
     var presenter : MainPresenter!
     var spinner : UIView?
+    var refreshController: UIRefreshControl?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter = MainPresenterImpl(view: self)
-        registerCells()
         setupNavigationBar()
+        registerCells()
+        setupRefreshControl()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -54,6 +57,15 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
     private func setupNavigationBar(){
         navigationItem.title = "Factory"
     }
+    private func setupRefreshControl(){
+        refreshController = UIRefreshControl()
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshController
+        } else {
+            self.tableView.addSubview(refreshController!)
+        }
+        refreshController?.addTarget(self, action: #selector(refreshNewsData), for: .valueChanged)
+    }
     
     func reloadData(){
         self.tableView.reloadData()
@@ -67,9 +79,17 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
         if let spin = spinner{
             removeSpinner(spinner: spin)
         }
+        if let refresher = refreshController{
+            refresher.endRefreshing()
+        }
+        
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){
         navigationController?.pushViewController(SingleViewController(singleArticle: presenter.getNews()[clickedMeal]), animated: true)
+    }
+    
+    @objc func refreshNewsData(){
+        presenter.refreshData(forceRefresh:true)
     }
 }

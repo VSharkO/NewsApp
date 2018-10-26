@@ -8,15 +8,19 @@
 
 import Foundation
 import Alamofire
+import RxSwift
 
 protocol Interactor{
-    func getDataFromURL(link: String, complition: @escaping (Bool,Data?,Error?) -> Void)
+    func getDataFromURL(link: String) -> Observable<[Article]>
 }
 
 extension Interactor{
-    func getDataFromURL(link: String, complition: @escaping (Bool,Data?,Error?) -> Void){
-        Alamofire.request(link).responseJSON { response in
-            complition(true, response.data, nil)
+    func getDataFromURL(link: String) -> Observable<[Article]>{
+        return Observable.create({ () -> Disposable in
+
+        })
+        Alamofire.request(link).validate().responseJSON { response in
+
         }
     }
 }

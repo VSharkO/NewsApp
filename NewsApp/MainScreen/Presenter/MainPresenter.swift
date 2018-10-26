@@ -9,7 +9,6 @@
 import UIKit
 
 protocol MainPresenter{
-    
+    func refreshData(forceRefresh: Bool)
     func getNews() -> [Article]
-    func getDataFromRepository()
 }

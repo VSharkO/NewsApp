@@ -8,6 +8,8 @@ target 'NewsApp' do
   # Pods for NewsApp
     pod 'Alamofire', '~> 4.7'
     pod 'Kingfisher', '4.9.0'
+    pod 'RxSwift',    '~> 4.0'
+    pod 'RxCocoa',    '~> 4.0'
 
   target 'NewsAppTests' do
     inherit! :search_paths

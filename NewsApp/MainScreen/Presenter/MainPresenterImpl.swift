@@ -7,38 +7,60 @@
 //
 
 import UIKit
+import RxSwift
 
 class MainPresenterImpl : MainPresenter{
     
     var articleRepository = ArticleRepository()
     var data : [Article] = []
+    var pullToRefresh = PublishSubject<Bool>()
     weak var view : MainView!
-    var numberOfLoadedImages = 0
+    
+    var timeOfLastResponse: Int32 = SYSTEM_CLOCK
     
     init(view : MainView) {
         self.view = view
-        getDataFromRepository()
+        refreshData(forceRefresh: true) //kada bude baza staviti na false
     }
     
-    func getNews() -> [Article] {
+    func getNews() -> [Article]{
         return data
     }
     
-    func getDataFromRepository(){
-        view?.showSpinner()
-        articleRepository.getResponseFromUrl { [weak self](success, arrayOfArticles, error) in
-            guard let strongSelf = self else{
-                return
-            }
-            if(success){
-                if let articles = arrayOfArticles{
-                    strongSelf.data = articles
-                }
-                strongSelf.view.hideSpinner()
-                strongSelf.view.reloadData()
-            }
-        }
+    func refreshData(forceRefresh: Bool){
+        forceRefresh ? pullToRefresh.onNext(true) : checkForRefresh()
     }
+    
+    private func checkForRefresh(){
+        (timeOfLastResponse * 300 < SYSTEM_CLOCK) ? pullToRefresh.onNext(true) : view.reloadData(); view.hideSpinner()
+    }
+    
+    func getDataFromRepository() -> Disposable{
+        return pullToRefresh.flatMap{_ -> Observable<[Article]> in
+            return self.articleRepository.getResponseFromUrl()
+            }.subscribe(onNext: {articles in
+                self.data = articles
+                self.view.reloadData()
+            })
+    }
+        
+        
+        
+//        articleRepository.getResponseFromUrl { [weak self](success, arrayOfArticles, error) in
+//            guard let strongSelf = self else{
+//                return
+//            }
+//            if(success){
+//                if let articles = arrayOfArticles{
+//                    strongSelf.data = articles
+//                    strongSelf.timeOfLastResponse = SYSTEM_CLOCK
+//                }
+//            }
+//            strongSelf.view.hideSpinner()
+//            strongSelf.view.reloadData()
+//        }
+//    }
+   
 }
 
 
