@@ -16,11 +16,22 @@ protocol Interactor{
 
 extension Interactor{
     func getDataFromURL(link: String) -> Observable<[Article]>{
-        return Observable.create({ () -> Disposable in
-
-        })
-        Alamofire.request(link).validate().responseJSON { response in
-
+        return Observable.create{ observer -> Disposable in
+            Alamofire.request(link)
+                .validate()
+                .responseJSON{response in
+                    guard let data = response.data else{
+                        observer.onError(response.error!)
+                        return
+                    }
+                    do{
+                        let articles = try JSONDecoder().decode(Response.self, from: data)
+                        observer.onNext(articles.articles)
+                    } catch {
+                        observer.onError(error)
+                    }
+            }
+            return Disposables.create()
         }
     }
 }
