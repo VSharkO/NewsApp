@@ -47,15 +47,15 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
         return descriptionText
     }()
     
+    init(singleArticle: Article) {
+        super.init(nibName: nil, bundle: nil)
+        presenter = SinglePresenterImpl(view: self, singleArticle: singleArticle)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-    }
-    
-    init(singleArticle: Article) {
-        super.init(nibName: nil, bundle: nil)
-        presenter = SinglePresenterImpl(view: self, singleArticle: singleArticle)
     }
     
     required init?(coder aDecoder: NSCoder) {
