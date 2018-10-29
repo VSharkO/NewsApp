@@ -25,7 +25,7 @@ class MainPresenterImpl : MainPresenter{
         disposableSpinner = InitSpinnerLogic()
         disposableRefresh = InitGetingDataFromRepository()
         fillDisposeBag()
-        refreshData(forceRefresh: false)//kada bude baza staviti na false ako je baza prazna(prvi puta se pokreće app)
+        refreshData(forceRefresh: false)
     }
     
     func getNews() -> [Article]{
@@ -36,7 +36,7 @@ class MainPresenterImpl : MainPresenter{
         if forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK{
             refresh.onNext(true)
         }else{
-            if data.isEmpty{
+            if data.isEmpty{ //Kada bude baza provjeriti dali je prazna
                 refresh.onNext(true)
                 showSpinner.onNext(true)
             }else{
