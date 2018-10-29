@@ -15,17 +15,12 @@ class MainPresenterImpl : MainPresenter{
     var data : [Article] = []
     var refresh = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
-    var disposableRefresh,disposableSpinner: Disposable! // ovo isto u view ili?
     weak var view : MainView!
     
     var timeOfLastResponse: Int32 = SYSTEM_CLOCK
     
     init(view : MainView) {
         self.view = view
-        disposableSpinner = InitSpinnerLogic()
-        disposableRefresh = InitGetingDataFromRepository()
-        fillDisposeBag()
-        refreshData(forceRefresh: false)
     }
     
     func getNews() -> [Article]{
@@ -42,11 +37,10 @@ class MainPresenterImpl : MainPresenter{
             }else{
                 view.reloadData()
             }
-            
         }
     }
     
-    func InitGetingDataFromRepository() -> Disposable{
+    func initGetingDataFromRepository() -> Disposable{ //ovaj spinner ne moram ručno prikazivati jer je pull to refresh
         return refresh.flatMap{_ -> Observable<[Article]> in
             return self.articleRepository.getResponseFromUrl()
             }
@@ -57,7 +51,7 @@ class MainPresenterImpl : MainPresenter{
             })
     }
     
-    func InitSpinnerLogic() -> Disposable{
+    func initSpinnerLogic() -> Disposable{
         return showSpinner.flatMap{ isTrue -> Observable<Bool> in
             if isTrue{
                 return Observable.just(true)
@@ -73,10 +67,6 @@ class MainPresenterImpl : MainPresenter{
                     self.view.hideSpinner()
                 }
             })
-    }
-    
-    func fillDisposeBag(){
-        view.fillDisposeBag(disposables: [disposableRefresh,disposableSpinner])
     }
 }
 

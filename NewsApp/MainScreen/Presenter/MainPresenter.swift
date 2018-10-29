@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol MainPresenter{
     func refreshData(forceRefresh: Bool)
     func getNews() -> [Article]
+    func initSpinnerLogic() -> Disposable
+    func initGetingDataFromRepository() -> Disposable
 }

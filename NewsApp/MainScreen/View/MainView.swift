@@ -14,5 +14,4 @@ protocol MainView: class{
     func displayLoader()
     func hideSpinner()
     func hideLoader()
-    func fillDisposeBag(disposables: [Disposable])
 }

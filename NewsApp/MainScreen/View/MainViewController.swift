@@ -15,14 +15,22 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
     var presenter : MainPresenter!
     var loader : UIView?
     var refreshController: UIRefreshControl?
-    var disposeBag: DisposeBag?
+    var disposeBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.presenter = MainPresenterImpl(view: self)
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
+        self.presenter = MainPresenterImpl(view: self)
+        //Init disposebles in presenter
+        presenter.initGetingDataFromRepository().disposed(by: disposeBag)
+        presenter.initSpinnerLogic().disposed(by: disposeBag)
+        presenter.refreshData(forceRefresh: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -82,10 +90,6 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
     
     func hideSpinner(){
         refreshController?.endRefreshing()
-    }
-    
-    func fillDisposeBag(disposables: [Disposable]){
-        disposeBag?.insert(disposables)
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){
