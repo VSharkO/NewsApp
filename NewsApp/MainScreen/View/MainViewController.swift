@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class MainViewController: UITableViewController,MainView,LoaderManager{
+class MainViewController: UITableViewController,LoaderManager{
     
     
     var viewModel : MainViewModelProtocol!

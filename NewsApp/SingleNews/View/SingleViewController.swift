@@ -8,12 +8,13 @@
 
 import UIKit
 import Kingfisher
+import RxSwift
 
-class SingleViewController: UIViewController, SingleView, LoaderManager{
+class SingleViewController: UIViewController, LoaderManager{
     
     var index: Int? = nil
-    var presenter: SinglePresenter? = nil
-    var spinner : UIView?
+    var loader : UIView?
+    var disposeBag: DisposeBag = DisposeBag()
     
     let rootView: UIView = {
         let view = UIView()
@@ -47,15 +48,17 @@ class SingleViewController: UIViewController, SingleView, LoaderManager{
         return descriptionText
     }()
     
-    init(singleArticle: Article) {
+    init(singleArticle: Article) { //Ili i za ovo praviti viewModel? 
         super.init(nibName: nil, bundle: nil)
-        presenter = SinglePresenterImpl(singleArticle: singleArticle)
+        setupViews()
+        setupConstraints()
+        setTitle(title: singleArticle.title)
+        setImage(imageUrl: singleArticle.urlToImage)
+        descriptionLabel.text = singleArticle.description
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -104,28 +107,14 @@ class SingleViewController: UIViewController, SingleView, LoaderManager{
         rootView.addSubview(descriptionLabel)
     }
     
-    func setImage(imageUrl: String){
-        let url = URL(string: imageUrl)
-        photoImageView.kf.setImage(with: url)
-    }
-    
-    func showSpinner(){
-        spinner = displayLoader(onView: self.view)
-    }
-    
-    func hideSpinner(){
-        if let spin = spinner{
-            removeLoader(loader: spin)
-        }
-    }
-    
-    func setTitle(title: String){
+    private func setTitle(title: String){
         titleLabel.text = title
         navigationItem.title = title
     }
     
-    func setDescription(description: String){
-        descriptionLabel.text = description
+    private func setImage(imageUrl: String){
+        let url = URL(string: imageUrl)
+        photoImageView.kf.setImage(with: url)
     }
     
 }
