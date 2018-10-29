@@ -17,7 +17,7 @@ protocol Interactor{
 extension Interactor{
     func getDataFromURL(link: String) -> Observable<[Article]>{
         return Observable.create{ observer -> Disposable in
-            Alamofire.request(link)
+            let request = Alamofire.request(link)
                 .validate()
                 .responseJSON{response in
                     guard let data = response.data else{
@@ -32,7 +32,9 @@ extension Interactor{
                     }
             }
             //rijesiti logiku za disposanje
-            return Disposables.create()
+            return Disposables.create{
+                request.cancel()
+            }
         }
     }
 }
