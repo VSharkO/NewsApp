@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import RxSwift
 
-class MainViewController: UITableViewController,MainView,SpinnerManager{
+class MainViewController: UITableViewController,MainView,LoaderManager{
+   
     
     var presenter : MainPresenter!
-    var spinner : UIView?
+    var loader : UIView?
     var refreshController: UIRefreshControl?
+    var disposeBag: DisposeBag?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +23,6 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
-        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -64,22 +66,26 @@ class MainViewController: UITableViewController,MainView,SpinnerManager{
         refreshController?.addTarget(self, action: #selector(refreshNewsData), for: .valueChanged)
     }
     
+    func displayLoader() {
+        loader = displayLoader(onView: self.view)
+    }
+    
+    func hideLoader() {
+        if let loader = loader{
+            removeLoader(loader: loader)
+        }
+    }
+    
     func reloadData(){
         self.tableView.reloadData()
     }
     
-    func showSpinner(){
-        spinner = displaySpinner(onView: self.view)
+    func hideSpinner(){
+        refreshController?.endRefreshing()
     }
     
-    func hideSpinner(){
-        if let spin = spinner{
-            removeSpinner(spinner: spin)
-        }
-        if let refresher = refreshController{
-            refresher.endRefreshing()
-        }
-        
+    func fillDisposeBag(disposables: [Disposable]){
+        disposeBag?.insert(disposables)
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){

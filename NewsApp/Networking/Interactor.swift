@@ -31,6 +31,7 @@ extension Interactor{
                         observer.onError(error)
                     }
             }
+            //rijesiti logiku za disposanje
             return Disposables.create()
         }
     }

@@ -15,17 +15,18 @@ class MainPresenterImpl : MainPresenter{
     var data : [Article] = []
     var refresh = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
-    var disposableRefresh,disposableSpinner: Disposable!
+    var disposableRefresh,disposableSpinner: Disposable! // ovo isto u view
     weak var view : MainView!
     
     var timeOfLastResponse: Int32 = SYSTEM_CLOCK
     
     init(view : MainView) {
         self.view = view
+        disposableSpinner = InitSpinnerLogic()
         disposableRefresh = getDataFromRepository()
-        refreshData(forceRefresh: true) //kada bude baza staviti na false ako je baza prazna(prvi puta se pokreće app)
-        disposableSpinner = spinnerLogic()
-        showSpinner.onNext(true)
+        fillDisposeBag()
+        self.showSpinner.onNext(true) //jer imam dva različita spinera, kada dolazim na screen prikaže se jedan,a kod pull to refresha se prikaže njegov defaultni
+        refreshData(forceRefresh: true)//kada bude baza staviti na false ako je baza prazna(prvi puta se pokreće app)
     }
     
     func getNews() -> [Article]{
@@ -33,36 +34,41 @@ class MainPresenterImpl : MainPresenter{
     }
     
     func refreshData(forceRefresh: Bool){
-        forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK ? refresh.onNext(true) : view.reloadData(); showSpinner.onNext(false)
+        forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK ? refresh.onNext(true) : view.reloadData();
     }
     
     func getDataFromRepository() -> Disposable{
         return refresh.flatMap{_ -> Observable<[Article]> in
-            return self.articleRepository.getResponseFromUrl()}
-            .subscribe(onNext: { [weak self] articles in
-                guard let strongSelf = self else{return}
-                strongSelf.data = articles
-                strongSelf.view.reloadData()
-                strongSelf.showSpinner.onNext(false)
+            return self.articleRepository.getResponseFromUrl()
+            }
+            .subscribe(onNext: { [unowned self] articles in
+                self.data = articles
+                self.view.reloadData()
+                self.showSpinner.onNext(false)
             })
     }
     
-    func spinnerLogic() -> Disposable{
+    func InitSpinnerLogic() -> Disposable{
         return showSpinner.flatMap{ isTrue -> Observable<Bool> in
             if isTrue{
-                    return Observable.just(true)
-                }else{
-                    return Observable.just(false)
-                }
+                return Observable.just(true)
+            }else{
+                return Observable.just(false)
             }
-            .subscribe(onNext: { [weak self] isTrue in
-                guard let strongSelf = self else{return}
-                isTrue ? strongSelf.view.showSpinner() : strongSelf.view.hideSpinner()
+            }
+            .subscribe(onNext: { [unowned self] isTrue in
+                if isTrue{
+                    self.view.displayLoader()
+                }else{
+                    self.view.hideLoader()
+                    self.view.hideSpinner()
+                }
             })
     }
     
-    //u kojem trenutku disposat disposable-e?
-            
+    func fillDisposeBag(){
+        view.fillDisposeBag(disposables: [disposableRefresh,disposableSpinner])
+    }
 }
 
 

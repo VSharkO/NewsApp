@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-class SingleViewController: UIViewController, SingleView, SpinnerManager{
+class SingleViewController: UIViewController, SingleView, LoaderManager{
     
     var index: Int? = nil
     var presenter: SinglePresenter? = nil
@@ -110,12 +110,12 @@ class SingleViewController: UIViewController, SingleView, SpinnerManager{
     }
     
     func showSpinner(){
-        spinner = displaySpinner(onView: self.view)
+        spinner = displayLoader(onView: self.view)
     }
     
     func hideSpinner(){
         if let spin = spinner{
-            removeSpinner(spinner: spin)
+            removeLoader(loader: spin)
         }
     }
     

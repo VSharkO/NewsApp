@@ -7,9 +7,12 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol MainView: class{
     func reloadData()
+    func displayLoader()
     func hideSpinner()
-    func showSpinner()
+    func hideLoader()
+    func fillDisposeBag(disposables: [Disposable])
 }
