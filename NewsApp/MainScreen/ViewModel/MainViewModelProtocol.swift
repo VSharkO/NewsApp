@@ -9,9 +9,13 @@
 import UIKit
 import RxSwift
 
-protocol MainPresenter{
+protocol MainViewModelProtocol{
     func refreshData(forceRefresh: Bool)
     func getNews() -> [Article]
     func initSpinnerLogic() -> Disposable
     func initGetingDataFromRepository() -> Disposable
+    
+    var viewReloadData: PublishSubject<Bool>{get}
+    var viewShowLoader: PublishSubject<Bool>{get}
+    var viewShowSpinner: PublishSubject<Bool>{get}
 }

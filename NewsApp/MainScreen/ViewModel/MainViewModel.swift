@@ -9,19 +9,18 @@
 import UIKit
 import RxSwift
 
-class MainPresenterImpl : MainPresenter{
+class MainViewModel : MainViewModelProtocol{
     
     var articleRepository = ArticleRepository()
     var data : [Article] = []
     var refresh = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
-    weak var view : MainView!
+    
+    var viewReloadData = PublishSubject<Bool>()
+    var viewShowLoader = PublishSubject<Bool>()
+    var viewShowSpinner = PublishSubject<Bool>()
     
     var timeOfLastResponse: Int32 = SYSTEM_CLOCK
-    
-    init(view : MainView) {
-        self.view = view
-    }
     
     func getNews() -> [Article]{
         return data
@@ -35,7 +34,7 @@ class MainPresenterImpl : MainPresenter{
                 refresh.onNext(true)
                 showSpinner.onNext(true)
             }else{
-                view.reloadData()
+                viewReloadData.onNext(true)
             }
         }
     }
@@ -46,7 +45,7 @@ class MainPresenterImpl : MainPresenter{
             }
             .subscribe(onNext: { [unowned self] articles in
                 self.data = articles
-                self.view.reloadData()
+                self.viewReloadData.onNext(true)
                 self.showSpinner.onNext(false)
             })
     }
@@ -61,10 +60,10 @@ class MainPresenterImpl : MainPresenter{
             }
             .subscribe(onNext: { [unowned self] isTrue in
                 if isTrue{
-                    self.view.displayLoader()
+                    self.viewShowLoader.onNext(true)
                 }else{
-                    self.view.hideLoader()
-                    self.view.hideSpinner()
+                    self.viewShowLoader.onNext(false)
+                    self.viewShowSpinner.onNext(false)
                 }
             })
     }

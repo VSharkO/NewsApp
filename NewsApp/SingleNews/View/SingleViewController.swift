@@ -49,7 +49,7 @@ class SingleViewController: UIViewController, SingleView, LoaderManager{
     
     init(singleArticle: Article) {
         super.init(nibName: nil, bundle: nil)
-        presenter = SinglePresenterImpl(view: self, singleArticle: singleArticle)
+        presenter = SinglePresenterImpl(singleArticle: singleArticle)
     }
     
     override func viewDidLoad() {

@@ -10,9 +10,9 @@ import UIKit
 import RxSwift
 
 class MainViewController: UITableViewController,MainView,LoaderManager{
-   
     
-    var presenter : MainPresenter!
+    
+    var viewModel : MainViewModelProtocol!
     var loader : UIView?
     var refreshController: UIRefreshControl?
     var disposeBag: DisposeBag = DisposeBag()
@@ -22,11 +22,13 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
-        self.presenter = MainPresenterImpl(view: self)
+        self.viewModel = MainViewModel()
+        initSubscripts()
         //Init disposebles in presenter
-        presenter.initGetingDataFromRepository().disposed(by: disposeBag)
-        presenter.initSpinnerLogic().disposed(by: disposeBag)
-        presenter.refreshData(forceRefresh: false)
+        viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
+        viewModel.initSpinnerLogic().disposed(by: disposeBag)
+        viewModel.refreshData(forceRefresh: false)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -38,13 +40,13 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.getNews().count
+        return viewModel.getNews().count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
-            cell.setTitle(title: presenter.getNews()[indexPath.row].title)
-            cell.setPicture(url: presenter.getNews()[indexPath.row].urlToImage)
+            cell.setTitle(title: viewModel.getNews()[indexPath.row].title)
+            cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
             return cell
         }
         else{
@@ -74,6 +76,34 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
         refreshController?.addTarget(self, action: #selector(refreshNewsData), for: .valueChanged)
     }
     
+    func initSubscripts(){
+        //reloading data
+        
+        viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
+                if reload{
+                    self.reloadData()
+                }
+            }).disposed(by: self.disposeBag)
+        // show/hide Loader
+        
+        viewModel.viewShowLoader.subscribe(onNext: { [unowned self] showLoader in
+            if showLoader{
+                self.displayLoader()
+            }else{
+                self.hideLoader()
+            }
+        }).disposed(by: self.disposeBag)
+        
+        // show/hide Loader
+        viewModel.viewShowSpinner.subscribe(onNext: { [unowned self] showSpinner in
+            if showSpinner{
+                self.displayLoader()
+            }else{
+                self.hideSpinner()
+            }
+        }).disposed(by: self.disposeBag)
+    }
+    
     func displayLoader() {
         loader = displayLoader(onView: self.view)
     }
@@ -93,10 +123,10 @@ class MainViewController: UITableViewController,MainView,LoaderManager{
     }
     
     @objc func moveToMealScreenWithIndex(clickedMeal: Int){
-        navigationController?.pushViewController(SingleViewController(singleArticle: presenter.getNews()[clickedMeal]), animated: true)
+        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedMeal]), animated: true)
     }
     
     @objc func refreshNewsData(){
-        presenter.refreshData(forceRefresh:true)
+        viewModel.refreshData(forceRefresh:true)
     }
 }
