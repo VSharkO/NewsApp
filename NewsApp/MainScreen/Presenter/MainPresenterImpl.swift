@@ -15,7 +15,7 @@ class MainPresenterImpl : MainPresenter{
     var data : [Article] = []
     var refresh = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
-    var disposableRefresh,disposableSpinner: Disposable! // ovo isto u view
+    var disposableRefresh,disposableSpinner: Disposable! // ovo isto u view ili?
     weak var view : MainView!
     
     var timeOfLastResponse: Int32 = SYSTEM_CLOCK
@@ -23,9 +23,8 @@ class MainPresenterImpl : MainPresenter{
     init(view : MainView) {
         self.view = view
         disposableSpinner = InitSpinnerLogic()
-        disposableRefresh = getDataFromRepository()
+        disposableRefresh = InitGetingDataFromRepository()
         fillDisposeBag()
-        self.showSpinner.onNext(true) //jer imam dva različita spinera, kada dolazim na screen prikaže se jedan,a kod pull to refresha se prikaže njegov defaultni
         refreshData(forceRefresh: true)//kada bude baza staviti na false ako je baza prazna(prvi puta se pokreće app)
     }
     
@@ -34,10 +33,13 @@ class MainPresenterImpl : MainPresenter{
     }
     
     func refreshData(forceRefresh: Bool){
+        if data.isEmpty{
+            self.showSpinner.onNext(true) //jer imam dva različita spinera, kada dolazim na screen prikaže se jedan,a kod pull to refresha se prikaže njegov defaultni
+        }
         forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK ? refresh.onNext(true) : view.reloadData();
     }
     
-    func getDataFromRepository() -> Disposable{
+    func InitGetingDataFromRepository() -> Disposable{
         return refresh.flatMap{_ -> Observable<[Article]> in
             return self.articleRepository.getResponseFromUrl()
             }
