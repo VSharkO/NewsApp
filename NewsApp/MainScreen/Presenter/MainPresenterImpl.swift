@@ -33,10 +33,12 @@ class MainPresenterImpl : MainPresenter{
     }
     
     func refreshData(forceRefresh: Bool){
-        if data.isEmpty{
-            self.showSpinner.onNext(true) //jer imam dva različita spinera, kada dolazim na screen prikaže se jedan,a kod pull to refresha se prikaže njegov defaultni
+        if forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK{
+            showSpinner.onNext(true)
+            refresh.onNext(true)
+        }else{
+            view.reloadData()
         }
-        forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK ? refresh.onNext(true) : view.reloadData();
     }
     
     func InitGetingDataFromRepository() -> Disposable{
