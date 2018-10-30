@@ -13,6 +13,8 @@
 		D530E727217F4A4700D3FE1C /* SingleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D530E726217F4A4600D3FE1C /* SingleViewController.swift */; };
 		D530E72A217F52E000D3FE1C /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = D530E729217F52E000D3FE1C /* Common.swift */; };
 		D5455C0A2180467E0006DA1F /* ArticleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5455C092180467E0006DA1F /* ArticleRepository.swift */; };
+		D579F9C521883032004D98A5 /* SingleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579F9C421883032004D98A5 /* SingleViewModel.swift */; };
+		D579F9C82188305F004D98A5 /* SingleViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579F9C72188305F004D98A5 /* SingleViewModelProtocol.swift */; };
 		D5DC45CE217DDE9B00709CD2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC45CD217DDE9B00709CD2 /* AppDelegate.swift */; };
 		D5DC45D5217DDE9C00709CD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5DC45D4217DDE9C00709CD2 /* Assets.xcassets */; };
 		D5DC45E3217DDE9D00709CD2 /* NewsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DC45E2217DDE9D00709CD2 /* NewsAppTests.swift */; };
@@ -41,6 +43,8 @@
 		D530E726217F4A4600D3FE1C /* SingleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewController.swift; sourceTree = "<group>"; };
 		D530E729217F52E000D3FE1C /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		D5455C092180467E0006DA1F /* ArticleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleRepository.swift; sourceTree = "<group>"; };
+		D579F9C421883032004D98A5 /* SingleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewModel.swift; sourceTree = "<group>"; };
+		D579F9C72188305F004D98A5 /* SingleViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewModelProtocol.swift; sourceTree = "<group>"; };
 		D5DC45CA217DDE9B00709CD2 /* NewsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5DC45CD217DDE9B00709CD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D5DC45D4217DDE9C00709CD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -119,6 +123,7 @@
 		D530E724217F487900D3FE1C /* SingleNews */ = {
 			isa = PBXGroup;
 			children = (
+				D579F9C62188303A004D98A5 /* ViewModel */,
 				D5455C00218038C90006DA1F /* View */,
 			);
 			path = SingleNews;
@@ -146,6 +151,16 @@
 				D5455C092180467E0006DA1F /* ArticleRepository.swift */,
 			);
 			path = ArticleRepository;
+			sourceTree = "<group>";
+		};
+		D579F9C62188303A004D98A5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				D579F9C421883032004D98A5 /* SingleViewModel.swift */,
+				D579F9C72188305F004D98A5 /* SingleViewModelProtocol.swift */,
+			);
+			name = ViewModel;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		D5DC45C1217DDE9B00709CD2 = {
@@ -394,10 +409,12 @@
 				D5DC45F4217DEE2D00709CD2 /* MainViewModelProtocol.swift in Sources */,
 				D5455C0A2180467E0006DA1F /* ArticleRepository.swift in Sources */,
 				D5DC45FD217DF13300709CD2 /* Article.swift in Sources */,
+				D579F9C521883032004D98A5 /* SingleViewModel.swift in Sources */,
 				D530E72A217F52E000D3FE1C /* Common.swift in Sources */,
 				D5DC45EE217DE07C00709CD2 /* MainViewController.swift in Sources */,
 				D5DC45F2217DE10500709CD2 /* TableViewCell.swift in Sources */,
 				D530E727217F4A4700D3FE1C /* SingleViewController.swift in Sources */,
+				D579F9C82188305F004D98A5 /* SingleViewModelProtocol.swift in Sources */,
 				D5DC45CE217DDE9B00709CD2 /* AppDelegate.swift in Sources */,
 				D530E71B217F008900D3FE1C /* Interactor.swift in Sources */,
 				D5DC45F6217DEE4400709CD2 /* MainViewModel.swift in Sources */,

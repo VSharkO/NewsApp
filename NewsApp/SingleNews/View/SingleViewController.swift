@@ -14,6 +14,7 @@ class SingleViewController: UIViewController, LoaderManager{
     
     var index: Int? = nil
     var loader : UIView?
+    var viewModel : SingleViewModelProtocol!
     var disposeBag: DisposeBag = DisposeBag()
     
     let rootView: UIView = {
@@ -48,13 +49,12 @@ class SingleViewController: UIViewController, LoaderManager{
         return descriptionText
     }()
     
-    init(singleArticle: Article) { //Ili i za ovo praviti viewModel? 
+    init(singleArticle: Article) { //Ili i za ovo praviti viewModel?
         super.init(nibName: nil, bundle: nil)
+        viewModel = SingleViewModel(article: singleArticle)
         setupViews()
         setupConstraints()
-        setTitle(title: singleArticle.title)
-        setImage(imageUrl: singleArticle.urlToImage)
-        descriptionLabel.text = singleArticle.description
+        initSubscripts()
     }
     
     override func viewDidLoad() {
@@ -68,6 +68,7 @@ class SingleViewController: UIViewController, LoaderManager{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         view.setNeedsLayout()
+        viewModel.getData()
     }
     
     func setupConstraints(){
@@ -97,6 +98,14 @@ class SingleViewController: UIViewController, LoaderManager{
             descriptionLabel.trailingAnchor.constraint(equalTo: rootView.trailingAnchor, constant: -10),
             descriptionLabel.bottomAnchor.constraint(equalTo: rootView.bottomAnchor, constant: -12)
             ])
+    }
+    
+    private func initSubscripts(){
+        viewModel.viewSetData.subscribe(onNext: { [unowned self] article in
+            self.setTitle(title: article.title)
+            self.setImage(imageUrl: article.urlToImage)
+            self.descriptionLabel.text = article.description
+        }).disposed(by: self.disposeBag)
     }
     
     private func setupViews(){

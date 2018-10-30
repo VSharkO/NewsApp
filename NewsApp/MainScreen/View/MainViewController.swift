@@ -76,7 +76,7 @@ class MainViewController: UITableViewController,LoaderManager{
         refreshController?.addTarget(self, action: #selector(refreshNewsData), for: .valueChanged)
     }
     
-    func initSubscripts(){
+    private func initSubscripts(){
         //reloading data
         
         viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
