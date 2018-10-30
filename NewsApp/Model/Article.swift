@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 struct Article: Codable {
     let title : String
@@ -25,4 +26,10 @@ struct Response: Codable {
     let source: String
     let sortBy: String
     let articles : [Article]
+}
+
+class DbArticle: Object{
+    @objc dynamic var title : String = ""
+    @objc dynamic var urlToImage: String = ""
+    @objc dynamic var articleDescription: String = ""
 }

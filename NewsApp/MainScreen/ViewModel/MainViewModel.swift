@@ -19,7 +19,6 @@ class MainViewModel : MainViewModelProtocol{
     var viewReloadData = PublishSubject<Bool>()
     var viewShowLoader = PublishSubject<Bool>()
     var viewShowSpinner = PublishSubject<Bool>()
-    
     var timeOfLastResponse: Int32 = SYSTEM_CLOCK
     
     func getNews() -> [Article]{
@@ -30,21 +29,23 @@ class MainViewModel : MainViewModelProtocol{
         if forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK{
             refresh.onNext(true)
         }else{
-            if data.isEmpty{ //Kada bude baza provjeriti dali je prazna
+            if articleRepository.getArticlesFromDb().isEmpty{
                 refresh.onNext(true)
                 showSpinner.onNext(true)
             }else{
+                data = articleRepository.getArticlesFromDb()
                 viewReloadData.onNext(true)
             }
         }
     }
     
-    func initGetingDataFromRepository() -> Disposable{ //ovaj spinner ne moram ručno prikazivati jer je pull to refresh
+    func initGetingDataFromRepository() -> Disposable{
         return refresh.flatMap{_ -> Observable<[Article]> in
             return self.articleRepository.getResponseFromUrl()
             }
             .subscribe(onNext: { [unowned self] articles in
                 self.data = articles
+                self.articleRepository.putArticlesToDb(articles: articles)
                 self.viewReloadData.onNext(true)
                 self.showSpinner.onNext(false)
             })

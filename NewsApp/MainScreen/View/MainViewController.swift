@@ -8,7 +8,7 @@
 
 import UIKit
 import RxSwift
-
+import RealmSwift
 class MainViewController: UITableViewController,LoaderManager{
     
     
@@ -33,6 +33,7 @@ class MainViewController: UITableViewController,LoaderManager{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+//        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
