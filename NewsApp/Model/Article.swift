@@ -13,6 +13,7 @@ struct Article: Codable {
     let title : String
     let urlToImage : String
     let description : String
+    var timeOfCreation : Double?
     
     init(title: String, image: String, description : String) {
         self.title = title
@@ -32,4 +33,5 @@ class DbArticle: Object{
     @objc dynamic var title : String = ""
     @objc dynamic var urlToImage: String = ""
     @objc dynamic var articleDescription: String = ""
+    @objc dynamic var timeOfCreation: Double = 0
 }

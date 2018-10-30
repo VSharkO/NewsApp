@@ -19,17 +19,19 @@ class MainViewModel : MainViewModelProtocol{
     var viewReloadData = PublishSubject<Bool>()
     var viewShowLoader = PublishSubject<Bool>()
     var viewShowSpinner = PublishSubject<Bool>()
-    var timeOfLastResponse: Int32 = SYSTEM_CLOCK
     
     func getNews() -> [Article]{
         return data
     }
     
     func refreshData(forceRefresh: Bool){
-        if forceRefresh || timeOfLastResponse * 300 < SYSTEM_CLOCK{
+        if forceRefresh || articleRepository.getArticlesFromDb().isEmpty{
+            if !forceRefresh{
+                showSpinner.onNext(true)
+            }
             refresh.onNext(true)
         }else{
-            if articleRepository.getArticlesFromDb().isEmpty{
+            if articleRepository.getArticlesFromDb()[0].timeOfCreation! / 300 < Date().timeIntervalSince1970{ //ako je podatak iz baze stariji od 5min
                 refresh.onNext(true)
                 showSpinner.onNext(true)
             }else{

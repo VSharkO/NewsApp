@@ -29,7 +29,9 @@ class ArticleRepository: Interactor{
         let dbArticlesArray = db.objects(DbArticle.self)
         var articleArray = [Article]()
         for article in dbArticlesArray{
-            articleArray.append(Article(title: article.title, image: article.urlToImage, description: article.articleDescription))
+            var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
+            currentArticle.timeOfCreation = article.timeOfCreation
+            articleArray.append(currentArticle)
         }
         return articleArray
     }
@@ -45,6 +47,7 @@ class ArticleRepository: Interactor{
             articleDb.title = article.title
             articleDb.urlToImage = article.urlToImage
             articleDb.articleDescription = article.description
+            articleDb.timeOfCreation =  Date().timeIntervalSince1970
             try! db.write {
                db.add(articleDb)
             }
