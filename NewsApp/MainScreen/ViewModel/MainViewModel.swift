@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 
 class MainViewModel : MainViewModelProtocol{
-    
     var articleRepository = ArticleRepository()
     var data : [Article] = []
     var refresh = PublishSubject<Bool>()
@@ -31,11 +30,12 @@ class MainViewModel : MainViewModelProtocol{
             }
             refresh.onNext(true)
         }else{
-            if articleRepository.getArticlesFromDb()[0].timeOfCreation! / 300 < Date().timeIntervalSince1970{ //ako je podatak iz baze stariji od 5min
+            if articleRepository.getArticlesFromDb()[0].timeOfCreation / 300 < Date().timeIntervalSince1970{ //ako je podatak iz baze stariji od 5min
                 refresh.onNext(true)
                 showSpinner.onNext(true)
             }else{
                 data = articleRepository.getArticlesFromDb()
+                self.setFavoritsTrueInData()
                 viewReloadData.onNext(true)
             }
         }
@@ -46,8 +46,9 @@ class MainViewModel : MainViewModelProtocol{
             return self.articleRepository.getResponseFromUrl()
             }
             .subscribe(onNext: { [unowned self] articles in
-                self.data = articles
                 self.articleRepository.putArticlesToDb(articles: articles)
+                self.data = articles
+                self.setFavoritsTrueInData()
                 self.viewReloadData.onNext(true)
                 self.showSpinner.onNext(false)
             })
@@ -69,6 +70,23 @@ class MainViewModel : MainViewModelProtocol{
                     self.viewShowSpinner.onNext(false)
                 }
             })
+    }
+    
+    func setNewsToFavorites(index: Int) {
+        let favoriteArticle = DbArticleFavorites()
+        data[index].isFavorite = true
+        favoriteArticle.title = data[index].title
+        articleRepository.putArticleToFavoriteDb(article: favoriteArticle)
+    }
+    
+    func setFavoritsTrueInData(){
+        for i in 0...data.count-1{
+            let currentArticle = DbArticleFavorites()
+            currentArticle.title = data[i].title
+            if articleRepository.getFavoriteArticlesFromDb().contains(currentArticle){
+                data[i].isFavorite = true
+            }
+        }
     }
 }
 

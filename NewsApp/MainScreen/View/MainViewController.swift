@@ -16,10 +16,10 @@ class MainViewController: UITableViewController,LoaderManager{
     var loader : UIView?
     var refreshController: UIRefreshControl?
     var disposeBag: DisposeBag = DisposeBag()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
+        setupNavigationBar()  //Nema naslova?
         registerCells()
         setupRefreshControl()
         self.viewModel = MainViewModel()
@@ -48,6 +48,9 @@ class MainViewController: UITableViewController,LoaderManager{
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
             cell.setTitle(title: viewModel.getNews()[indexPath.row].title)
             cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
+            (viewModel.getNews()[indexPath.row].isFavorite) ? cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal) : cell.button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
+            cell.button.tag = indexPath.row
+            cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
             return cell
         }
         else{
@@ -57,7 +60,7 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        moveToMealScreenWithIndex(clickedMeal: indexPath.row)
+        moveToSingleScreenWithIndex(clickedNews: indexPath.row)
     }
     
     private func registerCells(){
@@ -65,7 +68,7 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     private func setupNavigationBar(){
-        navigationItem.title = "Factory"
+        navigationItem.title = "New Articles"
     }
     private func setupRefreshControl(){
         refreshController = UIRefreshControl()
@@ -123,11 +126,16 @@ class MainViewController: UITableViewController,LoaderManager{
         refreshController?.endRefreshing()
     }
     
-    @objc func moveToMealScreenWithIndex(clickedMeal: Int){
-        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedMeal]), animated: true)
+    @objc func moveToSingleScreenWithIndex(clickedNews: Int){
+        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
     }
     
     @objc func refreshNewsData(){
         viewModel.refreshData(forceRefresh:true)
+    }
+    
+    @objc func buttonClicked(sender:UIButton)
+    {
+        viewModel.setNewsToFavorites(index: sender.tag)
     }
 }

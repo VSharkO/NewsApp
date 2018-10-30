@@ -13,14 +13,22 @@ struct Article: Codable {
     let title : String
     let urlToImage : String
     let description : String
-    var timeOfCreation : Double?
+    var timeOfCreation : Double = 0
+    var isFavorite : Bool = false
     
     init(title: String, image: String, description : String) {
         self.title = title
         self.urlToImage = image
         self.description = description
     }
+    
+    private enum CodingKeys: String, CodingKey {
+        case title
+        case urlToImage
+        case description
+    }
 }
+
 
 struct Response: Codable {
     let status: String
@@ -34,4 +42,9 @@ class DbArticle: Object{
     @objc dynamic var urlToImage: String = ""
     @objc dynamic var articleDescription: String = ""
     @objc dynamic var timeOfCreation: Double = 0
+    @objc dynamic var isFavorite: Bool = false
+}
+
+class DbArticleFavorites: Object{
+    @objc dynamic var title : String = ""
 }

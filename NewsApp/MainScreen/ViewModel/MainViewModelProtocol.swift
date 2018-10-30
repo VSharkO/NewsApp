@@ -14,6 +14,7 @@ protocol MainViewModelProtocol{
     func getNews() -> [Article]
     func initSpinnerLogic() -> Disposable
     func initGetingDataFromRepository() -> Disposable
+    func setNewsToFavorites(index: Int)
     
     var viewReloadData: PublishSubject<Bool>{get}
     var viewShowLoader: PublishSubject<Bool>{get}

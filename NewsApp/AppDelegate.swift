@@ -13,10 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tableViewController = MainViewController()
-        let navigationController = UINavigationController(rootViewController: tableViewController)
+        let tabViewController = TabBarController()
         if let rootWindow = window{
-            rootWindow.rootViewController = navigationController
+            rootWindow.rootViewController = tabViewController
             rootWindow.makeKeyAndVisible()
             return true
         }else{        

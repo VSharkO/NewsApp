@@ -27,6 +27,16 @@ class TableViewCell: UITableViewCell{
         return title
     }()
     
+    var button : UIButton = {
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.borderWidth = 2
+        button.layer.borderColor = button.tintColor.cgColor
+        button.layer.cornerRadius = 10
+        button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
+        return button
+    }()
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -40,6 +50,7 @@ class TableViewCell: UITableViewCell{
     func setupViews(){
         contentView.addSubview(photo)
         contentView.addSubview(title)
+        contentView.addSubview(button)
     }
     
     func setupConstraints(){
@@ -58,7 +69,14 @@ class TableViewCell: UITableViewCell{
             title.topAnchor.constraint(equalTo: contentView.topAnchor),
             title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             title.leadingAnchor.constraint(equalTo: photo.trailingAnchor, constant: 20),
-            title.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            title.trailingAnchor.constraint(lessThanOrEqualTo: button.leadingAnchor, constant: -10)
+            ])
+        
+        NSLayoutConstraint.activate([
+            button.centerYAnchor.constraint(equalTo: photo.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 20),
+            button.heightAnchor.constraint(equalToConstant: 20),
+            button.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20)
             ])
     }
     

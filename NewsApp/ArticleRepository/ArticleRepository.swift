@@ -31,6 +31,7 @@ class ArticleRepository: Interactor{
         for article in dbArticlesArray{
             var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
             currentArticle.timeOfCreation = article.timeOfCreation
+            currentArticle.isFavorite = article.isFavorite
             articleArray.append(currentArticle)
         }
         return articleArray
@@ -48,9 +49,25 @@ class ArticleRepository: Interactor{
             articleDb.urlToImage = article.urlToImage
             articleDb.articleDescription = article.description
             articleDb.timeOfCreation =  Date().timeIntervalSince1970
+            articleDb.isFavorite = article.isFavorite
             try! db.write {
                db.add(articleDb)
             }
         }
+    }
+    
+    func putArticleToFavoriteDb(article: DbArticleFavorites){
+        try! db.write {
+            db.add(article)
+        }
+    }
+    
+    func getFavoriteArticlesFromDb() -> [DbArticleFavorites]{
+        guard !db.isEmpty else{
+            return []
+        }
+        _ = db.objects(DbArticleFavorites.self)
+        let articleArray = [DbArticleFavorites]()
+        return articleArray
     }
 }
