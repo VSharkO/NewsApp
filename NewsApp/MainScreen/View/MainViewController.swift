@@ -34,7 +34,7 @@ class MainViewController: UITableViewController,LoaderManager{
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         reloadData()
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
+//        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
