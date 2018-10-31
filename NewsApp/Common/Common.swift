@@ -9,7 +9,7 @@
 import UIKit
 
 struct Constants{
-    static let url = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=6946d0c07a1c4555a4186bfcade76398"
+    static let url = "https://newsapi.org/v1/articles?apiKey=91f05f55e0e441699553b373b30eea61&sortBy=top&source=bbc-news"
 }
 
 protocol LoaderManager{

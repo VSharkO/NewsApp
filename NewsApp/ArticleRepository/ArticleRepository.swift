@@ -36,6 +36,20 @@ class ArticleRepository: Interactor{
         return articleArray
     }
     
+    func getFilteredFavoriteArticles() -> [Article]{
+        guard !db.isEmpty else{
+            return []
+        }
+        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite} )
+        var articleArray = [Article]()
+        for article in dbArticlesArray{
+            var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
+            currentArticle.isFavorite = article.isFavorite
+            articleArray.append(currentArticle)
+        }
+        return articleArray
+    }
+    
     func putArticleToFavoriteDb(article: Article){
         let favoriteArticle = DbArticleFavorites()
         favoriteArticle.title = article.title
@@ -52,11 +66,11 @@ class ArticleRepository: Interactor{
         var dbArticles: [DbArticle] = []
         var isFavorite = false
         for article in articles{
-            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil || article.isFavorite{
+            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil{
                 isFavorite = true
             }
             dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: isFavorite))
-            if article.isFavorite{
+            if article.isFavorite || isFavorite{
                 putArticleToFavoriteDb(article: article)
             }else{
                 removeFromFavoriteDb(article: article)

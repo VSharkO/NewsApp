@@ -1,31 +1,31 @@
 //
-//  MainViewController.swift
+//  FavoritesViewConrtoller.swift
 //  NewsApp
 //
-//  Created by Valentin Šarić on 22/10/2018.
+//  Created by Valentin Šarić on 31/10/2018.
 //  Copyright © 2018 Valentin Šarić. All rights reserved.
 //
 
 import UIKit
 import RxSwift
 import RealmSwift
-class MainViewController: UITableViewController,LoaderManager{
+
+class FavoritesViewController:  UITableViewController,LoaderManager{
     
     
-    var viewModel : MainViewModelProtocol!
+    var viewModel : FavoritesViewModelProtocol!
     var loader : UIView?
     var refreshController: UIRefreshControl?
     var disposeBag: DisposeBag = DisposeBag()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
-        self.viewModel = MainViewModel()
+        self.viewModel = FavoritesViewModel()
         initSubscripts()
         //Init disposebles in presenter
-        viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
         viewModel.initSpinnerLogic().disposed(by: disposeBag)
         viewModel.refreshData(forceRefresh: false)
         
@@ -50,7 +50,7 @@ class MainViewController: UITableViewController,LoaderManager{
             cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
             (viewModel.getNews()[indexPath.row].isFavorite) ? cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal) : cell.button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
             cell.button.tag = indexPath.row
-            cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
+//            cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
             return cell
         }
         else{
@@ -84,10 +84,10 @@ class MainViewController: UITableViewController,LoaderManager{
         //reloading data
         
         viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
-                if reload{
-                    self.reloadData()
-                }
-            }).disposed(by: self.disposeBag)
+            if reload{
+                self.reloadData()
+            }
+        }).disposed(by: self.disposeBag)
         // show/hide Loader
         
         viewModel.viewShowLoader.subscribe(onNext: { [unowned self] showLoader in
@@ -127,15 +127,16 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     @objc func moveToSingleScreenWithIndex(clickedNews: Int){
-        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
+        navigationController?.pushViewController(FavoritesViewController(), animated: true)
     }
     
     @objc func refreshNewsData(){
         viewModel.refreshData(forceRefresh:true)
     }
     
-    @objc func buttonClicked(sender:UIButton)
-    {
-        viewModel.setNewsToFavorites(index: sender.tag)
-    }
+//    @objc func buttonClicked(sender:UIButton)
+//    {
+//        viewModel.setNewsToFavorites(index: sender.tag)
+//    }
 }
+
