@@ -10,12 +10,5 @@ import Foundation
 import RxSwift
 
 protocol FavoritesViewModelProtocol{
-    func refreshData(forceRefresh: Bool)
     func getNews() -> [Article]
-    func initSpinnerLogic() -> Disposable
-    func setNewsToFavorites(index: Int)
-    
-    var viewReloadData: PublishSubject<Bool>{get}
-    var viewShowLoader: PublishSubject<Bool>{get}
-    var viewShowSpinner: PublishSubject<Bool>{get}
 }

@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RealmSwift
 
+//protokol? rx?
 class ArticleRepository: Interactor{
     
     var db: Realm

@@ -10,30 +10,20 @@ import UIKit
 import RxSwift
 import RealmSwift
 
-class FavoritesViewController:  UITableViewController,LoaderManager{
-    
+class FavoritesViewController:  UITableViewController{
     
     var viewModel : FavoritesViewModelProtocol!
-    var loader : UIView?
-    var refreshController: UIRefreshControl?
-    var disposeBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
-        setupRefreshControl()
         self.viewModel = FavoritesViewModel()
-        initSubscripts()
-        //Init disposebles in presenter
-        viewModel.initSpinnerLogic().disposed(by: disposeBag)
-        viewModel.refreshData(forceRefresh: false)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        reloadData()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -50,7 +40,6 @@ class FavoritesViewController:  UITableViewController,LoaderManager{
             cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
             (viewModel.getNews()[indexPath.row].isFavorite) ? cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal) : cell.button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
             cell.button.tag = indexPath.row
-//            cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
             return cell
         }
         else{
@@ -68,75 +57,15 @@ class FavoritesViewController:  UITableViewController,LoaderManager{
     }
     
     private func setupNavigationBar(){
-        navigationItem.title = "New Articles"
-    }
-    private func setupRefreshControl(){
-        refreshController = UIRefreshControl()
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshController
-        } else {
-            self.tableView.addSubview(refreshController!)
-        }
-        refreshController?.addTarget(self, action: #selector(refreshNewsData), for: .valueChanged)
-    }
-    
-    private func initSubscripts(){
-        //reloading data
-        
-        viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
-            if reload{
-                self.reloadData()
-            }
-        }).disposed(by: self.disposeBag)
-        // show/hide Loader
-        
-        viewModel.viewShowLoader.subscribe(onNext: { [unowned self] showLoader in
-            if showLoader{
-                self.displayLoader()
-            }else{
-                self.hideLoader()
-            }
-        }).disposed(by: self.disposeBag)
-        
-        // show/hide Loader
-        viewModel.viewShowSpinner.subscribe(onNext: { [unowned self] showSpinner in
-            if showSpinner{
-                self.displayLoader()
-            }else{
-                self.hideSpinner()
-            }
-        }).disposed(by: self.disposeBag)
-    }
-    
-    func displayLoader() {
-        loader = displayLoader(onView: self.view)
-    }
-    
-    func hideLoader() {
-        if let loader = loader{
-            removeLoader(loader: loader)
-        }
+        navigationItem.title = "Favorites"
     }
     
     func reloadData(){
         self.tableView.reloadData()
     }
     
-    func hideSpinner(){
-        refreshController?.endRefreshing()
-    }
-    
     @objc func moveToSingleScreenWithIndex(clickedNews: Int){
-        navigationController?.pushViewController(FavoritesViewController(), animated: true)
+        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
     }
-    
-    @objc func refreshNewsData(){
-        viewModel.refreshData(forceRefresh:true)
-    }
-    
-//    @objc func buttonClicked(sender:UIButton)
-//    {
-//        viewModel.setNewsToFavorites(index: sender.tag)
-//    }
 }
 
