@@ -11,4 +11,7 @@ import RxSwift
 
 protocol FavoritesViewModelProtocol{
     func getNews() -> [Article]
+    func removeNewsFromFavorites(index: Int)
+    
+    var viewReloadData: PublishSubject<Bool>{get}
 }

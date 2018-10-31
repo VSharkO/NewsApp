@@ -20,6 +20,7 @@ class MainViewModel : MainViewModelProtocol{
     var viewShowSpinner = PublishSubject<Bool>()
     
     func getNews() -> [Article]{
+        data = articleRepository.getArticlesFromDb()
         return data
     }
     

@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 
 class FavoritesViewModel : FavoritesViewModelProtocol{
+    var viewReloadData = PublishSubject<Bool>()
     
     var articleRepository = ArticleRepository()
     var data : [Article] = []
@@ -17,6 +18,12 @@ class FavoritesViewModel : FavoritesViewModelProtocol{
     func getNews() -> [Article]{
         data = articleRepository.getFilteredFavoriteArticles()
         return data
+    }
+    
+    func removeNewsFromFavorites(index: Int){
+        articleRepository.removeFromFavoriteDb(article: data[index])
+        data.remove(at: index)
+        viewReloadData.onNext(true)
     }
 }
 

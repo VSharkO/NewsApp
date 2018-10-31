@@ -41,7 +41,9 @@ class ArticleRepository: Interactor{
         guard !db.isEmpty else{
             return []
         }
-        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite} )
+        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite}).sorted(by: {(lhsData, rhsData) -> Bool in
+            return lhsData.timeOfCreation < rhsData.timeOfCreation
+        })
         var articleArray = [Article]()
         for article in dbArticlesArray{
             var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
@@ -97,6 +99,11 @@ class ArticleRepository: Interactor{
         if let news = db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first{
             try! db.write {
                 db.delete(news)
+            }
+        }
+        if let dbArticle = db.objects(DbArticle.self).filter({$0.title == article.title}).first{
+            try! db.write {
+                dbArticle.isFavorite = false
             }
         }
     }

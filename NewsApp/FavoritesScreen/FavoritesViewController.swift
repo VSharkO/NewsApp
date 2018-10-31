@@ -13,16 +13,19 @@ import RealmSwift
 class FavoritesViewController:  UITableViewController{
     
     var viewModel : FavoritesViewModelProtocol!
+    var disposeBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
         self.viewModel = FavoritesViewModel()
+        initSubscripts()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         reloadData()
     }
     
@@ -40,12 +43,12 @@ class FavoritesViewController:  UITableViewController{
             cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
             (viewModel.getNews()[indexPath.row].isFavorite) ? cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal) : cell.button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
             cell.button.tag = indexPath.row
+            cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
             return cell
         }
         else{
             return TableViewCell()
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -64,8 +67,22 @@ class FavoritesViewController:  UITableViewController{
         self.tableView.reloadData()
     }
     
+    private func initSubscripts(){
+        //reloading data
+        viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
+            if reload{
+                self.reloadData()
+            }
+        }).disposed(by: self.disposeBag)
+    }
+    
     @objc func moveToSingleScreenWithIndex(clickedNews: Int){
         navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
+    }
+    
+    @objc func buttonClicked(sender:UIButton)
+    {
+        viewModel.removeNewsFromFavorites(index: sender.tag)
     }
 }
 
