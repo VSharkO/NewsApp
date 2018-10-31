@@ -30,35 +30,42 @@ class ArticleRepository: Interactor{
         var articleArray = [Article]()
         for article in dbArticlesArray{
             var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
-            currentArticle.timeOfCreation = article.timeOfCreation
             currentArticle.isFavorite = article.isFavorite
             articleArray.append(currentArticle)
         }
         return articleArray
     }
     
-    func putArticlesToDb(articles: [Article]){
-        if !db.isEmpty{
-            try! db.write{
-            db.deleteAll()
-            }
-        }
-        for article in articles{
-            let articleDb = DbArticle()
-            articleDb.title = article.title
-            articleDb.urlToImage = article.urlToImage
-            articleDb.articleDescription = article.description
-            articleDb.timeOfCreation =  Date().timeIntervalSince1970
-            articleDb.isFavorite = article.isFavorite
+    func putArticleToFavoriteDb(article: Article){
+        let favoriteArticle = DbArticleFavorites()
+        favoriteArticle.title = article.title
+        
+        guard db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil else{
             try! db.write {
-               db.add(articleDb)
+                db.add(favoriteArticle)
             }
+            return
         }
     }
     
-    func putArticleToFavoriteDb(article: DbArticleFavorites){
+    func putArticlesToDb(articles: [Article]){
+        var dbArticles: [DbArticle] = []
+        var isFavorite = false
+        for article in articles{
+            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil || article.isFavorite{
+                isFavorite = true
+            }
+            dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: isFavorite))
+            if article.isFavorite{
+                putArticleToFavoriteDb(article: article)
+            }else{
+                removeFromFavoriteDb(article: article)
+            }
+            isFavorite = false
+        }
         try! db.write {
-            db.add(article)
+            db.delete(db.objects(DbArticle.self))
+            db.add(dbArticles)
         }
     }
     
@@ -70,4 +77,14 @@ class ArticleRepository: Interactor{
         let articleArray = [DbArticleFavorites]()
         return articleArray
     }
+    
+    func removeFromFavoriteDb(article: Article){
+        if let news = db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first{
+            try! db.write {
+                db.delete(news)
+            }
+        }
+    }
+    
 }
+

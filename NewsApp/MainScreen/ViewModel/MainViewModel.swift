@@ -35,7 +35,6 @@ class MainViewModel : MainViewModelProtocol{
                 showSpinner.onNext(true)
             }else{
                 data = articleRepository.getArticlesFromDb()
-                self.setFavoritsTrueInData()
                 viewReloadData.onNext(true)
             }
         }
@@ -47,8 +46,7 @@ class MainViewModel : MainViewModelProtocol{
             }
             .subscribe(onNext: { [unowned self] articles in
                 self.articleRepository.putArticlesToDb(articles: articles)
-                self.data = articles
-                self.setFavoritsTrueInData()
+                self.data = self.articleRepository.getArticlesFromDb()
                 self.viewReloadData.onNext(true)
                 self.showSpinner.onNext(false)
             })
@@ -73,21 +71,19 @@ class MainViewModel : MainViewModelProtocol{
     }
     
     func setNewsToFavorites(index: Int) {
-        let favoriteArticle = DbArticleFavorites()
-        data[index].isFavorite = true
-        favoriteArticle.title = data[index].title
-        articleRepository.putArticleToFavoriteDb(article: favoriteArticle)
-    }
-    
-    func setFavoritsTrueInData(){
-        for i in 0...data.count-1{
-            let currentArticle = DbArticleFavorites()
-            currentArticle.title = data[i].title
-            if articleRepository.getFavoriteArticlesFromDb().contains(currentArticle){
-                data[i].isFavorite = true
-            }
+        if(data[index].isFavorite){
+            data[index].isFavorite = false
+            articleRepository.removeFromFavoriteDb(article: data[index])
+            articleRepository.putArticlesToDb(articles: data)
+            viewReloadData.onNext(true)
+        }else{
+            data[index].isFavorite = true
+            articleRepository.putArticleToFavoriteDb(article: data[index])
+            articleRepository.putArticlesToDb(articles: data)
+            viewReloadData.onNext(true)
         }
     }
+    
 }
 
 
