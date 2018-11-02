@@ -66,17 +66,17 @@ class TableViewCell: UITableViewCell{
         constraintPhotoHeight.isActive = true
         
         NSLayoutConstraint.activate([
-            button.centerYAnchor.constraint(equalTo: photo.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 20),
-            button.heightAnchor.constraint(equalToConstant: 20),
-            button.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20)
-            ])
-        
-        NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: contentView.topAnchor),
             title.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             title.leadingAnchor.constraint(equalTo: photo.trailingAnchor, constant: 20),
             title.trailingAnchor.constraint(lessThanOrEqualTo: button.leadingAnchor, constant: -10)
+            ])
+        
+        NSLayoutConstraint.activate([
+            button.centerYAnchor.constraint(equalTo: photo.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 20),
+            button.heightAnchor.constraint(equalToConstant: 20),
+            button.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20)
             ])
     }
     
