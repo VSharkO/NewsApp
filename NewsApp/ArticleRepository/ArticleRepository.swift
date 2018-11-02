@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RealmSwift
 
-//protokol? rx?
+//da komunicira sa viewModelima preko protokola? rx?
 class ArticleRepository: Interactor{
     
     var db: Realm
@@ -36,13 +36,13 @@ class ArticleRepository: Interactor{
         }
         return articleArray
     }
-    
+    //jel ovo ok ili trebam u favorite db spremati cijele articl-e pa iz nje prikazivati u favorite screen-u
     func getFilteredFavoriteArticles() -> [Article]{
         guard !db.isEmpty else{
             return []
         }
-        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite}).sorted(by: {(lhsData, rhsData) -> Bool in
-            return lhsData.timeOfCreation < rhsData.timeOfCreation
+        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite}).sorted(by: {(firstNews, secondNews) -> Bool in
+            return firstNews.timeOfCreation < secondNews.timeOfCreation
         })
         var articleArray = [Article]()
         for article in dbArticlesArray{
@@ -78,7 +78,6 @@ class ArticleRepository: Interactor{
             }else{
                 removeFromFavoriteDb(article: article)
             }
-            isFavorite = false
         }
         try! db.write {
             db.delete(db.objects(DbArticle.self))

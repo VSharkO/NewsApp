@@ -41,7 +41,7 @@ class FavoritesViewController:  UITableViewController{
         if let cell = tableView.dequeueReusableCell(withIdentifier: "customeCell", for: indexPath) as? TableViewCell{
             cell.setTitle(title: viewModel.getNews()[indexPath.row].title)
             cell.setPicture(url: viewModel.getNews()[indexPath.row].urlToImage)
-            (viewModel.getNews()[indexPath.row].isFavorite) ? cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal) : cell.button.setBackgroundImage(#imageLiteral(resourceName: "addImage"), for: .normal)
+            cell.button.setBackgroundImage(#imageLiteral(resourceName: "removeImage"), for: .normal)
             cell.button.tag = indexPath.row
             cell.button.addTarget(self, action: #selector(buttonClicked(sender:)), for: .touchUpInside)
             return cell

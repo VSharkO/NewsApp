@@ -171,12 +171,28 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
-		D5A2E6D92189DA9900195919 /* FavoritesScreen */ = {
+		D5A11F5E218C3A4F00450E38 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				D5A2E6DA2189DABE00195919 /* FavoritesViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D5A11F5F218C3A6F00450E38 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
 				D5A2E6DC2189DB6000195919 /* FavoritesViewModel.swift */,
 				D5A2E6DE2189DBA400195919 /* FavoritesViewModelProtocol.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D5A2E6D92189DA9900195919 /* FavoritesScreen */ = {
+			isa = PBXGroup;
+			children = (
+				D5A11F5F218C3A6F00450E38 /* ViewModel */,
+				D5A11F5E218C3A4F00450E38 /* View */,
 			);
 			path = FavoritesScreen;
 			sourceTree = "<group>";
