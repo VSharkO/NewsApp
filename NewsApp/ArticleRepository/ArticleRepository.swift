@@ -78,6 +78,7 @@ class ArticleRepository: Interactor{
             }else{
                 removeFromFavoriteDb(article: article)
             }
+            isFavorite = false
         }
         try! db.write {
             db.delete(db.objects(DbArticle.self))
