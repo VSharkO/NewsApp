@@ -21,12 +21,12 @@ class FavoritesViewController:  UITableViewController{
         registerCells()
         self.viewModel = FavoritesViewModel()
         initSubscripts()
+        viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        reloadData()
+        viewModel.refreshData()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {

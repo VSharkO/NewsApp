@@ -42,7 +42,7 @@ class DbArticle: Object{
     @objc dynamic var title : String = ""
     @objc dynamic var urlToImage: String = ""
     @objc dynamic var articleDescription: String = ""
-    @objc dynamic var timeOfCreation: Double = Date().timeIntervalSince1970
+    @objc dynamic var timeOfCreation: Double = 0
     @objc dynamic var isFavorite: Bool = false
     
     convenience init(articleTitle: String, articleUrlToImage: String, description: String, articleTimeOfCreation: Double, articleIsFavorite: Bool) {
@@ -50,16 +50,25 @@ class DbArticle: Object{
         title = articleTitle
         urlToImage = articleUrlToImage
         articleDescription = description
-        timeOfCreation = articleTimeOfCreation
+        timeOfCreation = Date().timeIntervalSince1970
         isFavorite = articleIsFavorite
     }
 }
 
 class DbArticleFavorites: Object{
-    @objc dynamic var title : String = ""
     
-    convenience init(articleTitle: String) {
+    @objc dynamic var title : String = ""
+    @objc dynamic var urlToImage: String = ""
+    @objc dynamic var articleDescription: String = ""
+    @objc dynamic var timeOfCreation: Double = 0
+    @objc dynamic var isFavorite: Bool = false
+    
+    convenience init(articleTitle: String, articleUrlToImage: String, description: String, articleTimeOfCreation: Double, articleIsFavorite: Bool) {
         self.init()
         title = articleTitle
+        urlToImage = articleUrlToImage
+        articleDescription = description
+        timeOfCreation = Date().timeIntervalSince1970
+        isFavorite = articleIsFavorite
     }
 }

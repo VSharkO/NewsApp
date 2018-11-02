@@ -10,8 +10,10 @@ import UIKit
 import RxSwift
 
 class MainViewModel : MainViewModelProtocol{
+
     var articleRepository = ArticleRepository()
     var data : [Article] = []
+    var dataAge: Date!
     var refresh = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
     
@@ -20,48 +22,53 @@ class MainViewModel : MainViewModelProtocol{
     var viewShowSpinner = PublishSubject<Bool>()
     
     func getNews() -> [Article]{
-        data = articleRepository.getArticlesFromDb()
         return data
     }
     
-    func refreshData(forceRefresh: Bool){
-        if forceRefresh || articleRepository.getArticlesFromDb().isEmpty{
-            if !forceRefresh{
-                showSpinner.onNext(true)
+    func initData() -> Disposable{
+        return self.articleRepository.getArticlesFromDb().subscribe(onNext: {[unowned self] articles in
+                if articles.isEmpty{
+                    self.refresh.onNext(true)
+                }else{
+                    if articles[0].timeOfCreation / 300 < Date().timeIntervalSince1970{
+                        self.refresh.onNext(true)
+                        self.showSpinner.onNext(true)
+                    }else{
+                        self.data = articles
+                        self.viewReloadData.onNext(true)
+                    }
             }
-            refresh.onNext(true)
-        }else{
-            if articleRepository.getArticlesFromDb()[0].timeOfCreation / 300 < Date().timeIntervalSince1970{ //ako je podatak iz baze stariji od 5min
-                refresh.onNext(true)
-                showSpinner.onNext(true)
-            }else{
-                data = articleRepository.getArticlesFromDb()
-                viewReloadData.onNext(true)
-            }
-        }
+            })
+    }
+    
+    func refreshData(){
+        refresh.onNext(true)
     }
     
     func initGetingDataFromRepository() -> Disposable{
-        return refresh.flatMap{_ -> Observable<[Article]> in
-            return self.articleRepository.getResponseFromUrl()
+        return refresh.flatMap({ _ -> Observable<([Article],[Article])> in
+            Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())
+        }).subscribe(onNext: { [unowned self] articlesFromUrl,articlesFavorites in
+            var newArticles = articlesFromUrl
+            var favoriteArticles = articlesFavorites
+            if articlesFavorites.count>0{
+                for i in 0...newArticles.count-1{
+                    for j in 0...articlesFavorites.count-1{
+                        if newArticles[i].title == favoriteArticles[j].title{
+                            newArticles[i].isFavorite = true
+                        }
+                    }
+                }
             }
-            .subscribe(onNext: { [unowned self] articles in
-                self.articleRepository.putArticlesToDb(articles: articles)
-                self.data = self.articleRepository.getArticlesFromDb()
-                self.viewReloadData.onNext(true)
-                self.showSpinner.onNext(false)
+            self.data = newArticles
+            self.viewShowLoader.onNext(false)
+            self.viewShowSpinner.onNext(false)
+            self.viewReloadData.onNext(true)
             })
     }
     
     func initSpinnerLogic() -> Disposable{
-        return showSpinner.flatMap{ isTrue -> Observable<Bool> in
-            if isTrue{
-                return Observable.just(true)
-            }else{
-                return Observable.just(false)
-            }
-            }
-            .subscribe(onNext: { [unowned self] isTrue in
+        return showSpinner.subscribe(onNext: { [unowned self] isTrue in
                 if isTrue{
                     self.viewShowLoader.onNext(true)
                 }else{

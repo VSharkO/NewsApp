@@ -11,9 +11,9 @@ import RxSwift
 import RealmSwift
 
 //da komunicira sa viewModelima preko protokola? rx?
-class ArticleRepository: Interactor{
+class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     
-    var db: Realm
+    let db: Realm
     
     init() {
         db = try! Realm()
@@ -23,9 +23,9 @@ class ArticleRepository: Interactor{
         return getDataFromURL(link: Constants.url)
     }
     
-    func getArticlesFromDb() -> [Article]{
+    func getArticlesFromDb() -> Observable<[Article]>{
         guard !db.isEmpty else{
-            return []
+            return Observable.just([])
         }
         let dbArticlesArray = db.objects(DbArticle.self)
         var articleArray = [Article]()
@@ -34,29 +34,11 @@ class ArticleRepository: Interactor{
             currentArticle.isFavorite = article.isFavorite
             articleArray.append(currentArticle)
         }
-        return articleArray
-    }
-    //jel ovo ok ili trebam u favorite db spremati cijele articl-e pa iz nje prikazivati u favorite screen-u
-    func getFilteredFavoriteArticles() -> [Article]{
-        guard !db.isEmpty else{
-            return []
-        }
-        let dbArticlesArray = db.objects(DbArticle.self).filter({$0.isFavorite}).sorted(by: {(firstNews, secondNews) -> Bool in
-            return firstNews.timeOfCreation < secondNews.timeOfCreation
-        })
-        var articleArray = [Article]()
-        for article in dbArticlesArray{
-            var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
-            currentArticle.isFavorite = article.isFavorite
-            articleArray.append(currentArticle)
-        }
-        return articleArray
+        return Observable.just(articleArray) 
     }
     
     func putArticleToFavoriteDb(article: Article){
-        let favoriteArticle = DbArticleFavorites()
-        favoriteArticle.title = article.title
-        
+        let favoriteArticle = DbArticleFavorites(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: article.isFavorite)
         guard db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil else{
             try! db.write {
                 db.add(favoriteArticle)
@@ -86,13 +68,20 @@ class ArticleRepository: Interactor{
         }
     }
     
-    func getFavoriteArticlesFromDb() -> [DbArticleFavorites]{
+    func getFavoriteArticlesFromDb() -> Observable<[Article]>{
         guard !db.isEmpty else{
-            return []
+            return Observable.just([])
         }
-        _ = db.objects(DbArticleFavorites.self)
-        let articleArray = [DbArticleFavorites]()
-        return articleArray
+        let dbArticlesArray = db.objects(DbArticleFavorites.self).sorted(by: {(firstNews, secondNews) -> Bool in
+            return firstNews.timeOfCreation < secondNews.timeOfCreation
+        })
+        var articleArray = [Article]()
+        for article in dbArticlesArray{
+            var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
+            currentArticle.isFavorite = article.isFavorite
+            articleArray.append(currentArticle)
+        }
+        return Observable.just(articleArray)
     }
     
     func removeFromFavoriteDb(article: Article){

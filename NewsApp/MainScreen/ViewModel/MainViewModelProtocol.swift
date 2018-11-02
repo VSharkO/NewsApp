@@ -10,11 +10,13 @@ import Foundation
 import RxSwift
 
 protocol MainViewModelProtocol{
-    func refreshData(forceRefresh: Bool)
-    func getNews() -> [Article]
     func initSpinnerLogic() -> Disposable
     func initGetingDataFromRepository() -> Disposable
+    func initData() -> Disposable
+    func getNews() -> [Article]
     func setNewsToFavorites(index: Int)
+    func refreshData()
+    
     
     var viewReloadData: PublishSubject<Bool>{get}
     var viewShowLoader: PublishSubject<Bool>{get}

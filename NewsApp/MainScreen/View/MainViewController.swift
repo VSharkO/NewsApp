@@ -25,16 +25,16 @@ class MainViewController: UITableViewController,LoaderManager{
         self.viewModel = MainViewModel()
         initSubscripts()
         //Init disposebles in presenter
+        viewModel.initData().disposed(by: disposeBag)
         viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
         viewModel.initSpinnerLogic().disposed(by: disposeBag)
-        viewModel.refreshData(forceRefresh: false)
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        reloadData()
-//        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        viewModel.refreshData() //TODO: ovdje logiku ispraviti
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -83,14 +83,13 @@ class MainViewController: UITableViewController,LoaderManager{
     
     private func initSubscripts(){
         //reloading data
-        
         viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
                 if reload{
                     self.reloadData()
                 }
             }).disposed(by: self.disposeBag)
-        // show/hide Loader
         
+        // show/hide Loader
         viewModel.viewShowLoader.subscribe(onNext: { [unowned self] showLoader in
             if showLoader{
                 self.displayLoader()
@@ -132,7 +131,7 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     @objc func refreshNewsData(){
-        viewModel.refreshData(forceRefresh:true)
+        viewModel.refreshData()
     }
     
     @objc func buttonClicked(sender:UIButton)
