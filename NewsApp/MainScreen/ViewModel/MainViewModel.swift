@@ -10,12 +10,12 @@ import UIKit
 import RxSwift
 
 class MainViewModel : MainViewModelProtocol{
-
+  
     var articleRepository = ArticleRepository()
     var data : [Article] = []
-    var dataAge: Date!
-    var refresh = PublishSubject<Bool>()
+    var forceRefreshFromApi = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
+    var refreshCurrentData = PublishSubject<Bool>()
     
     var viewReloadData = PublishSubject<Bool>()
     var viewShowLoader = PublishSubject<Bool>()
@@ -26,27 +26,33 @@ class MainViewModel : MainViewModelProtocol{
     }
     
     func initData() -> Disposable{
-        return self.articleRepository.getArticlesFromDb().subscribe(onNext: {[unowned self] articles in
-                if articles.isEmpty{
-                    self.refresh.onNext(true)
+        return refreshCurrentData.flatMap({_ -> Observable<[Article]> in
+            return self.articleRepository.getArticlesFromDb()
+        }).subscribe(onNext: {[unowned self] articles in
+            if articles.isEmpty{
+                self.forceRefreshFromApi.onNext(true)
+            }else{
+                if articles[0].timeOfCreation + 300 < Date().timeIntervalSince1970{
+                    self.showSpinner.onNext(true)
+                    self.forceRefreshFromApi.onNext(true)
                 }else{
-                    if articles[0].timeOfCreation / 300 < Date().timeIntervalSince1970{
-                        self.refresh.onNext(true)
-                        self.showSpinner.onNext(true)
-                    }else{
-                        self.data = articles
-                        self.viewReloadData.onNext(true)
-                    }
+                    self.data = articles
+                    self.viewReloadData.onNext(true)
+                }
             }
-            })
+        })
+    }
+    
+    func forceRefreshData(){
+        forceRefreshFromApi.onNext(true)
     }
     
     func refreshData(){
-        refresh.onNext(true)
+        refreshCurrentData.onNext(true)
     }
     
     func initGetingDataFromRepository() -> Disposable{
-        return refresh.flatMap({ _ -> Observable<([Article],[Article])> in
+        return forceRefreshFromApi.flatMap({ _ -> Observable<([Article],[Article])> in
             Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())
         }).subscribe(onNext: { [unowned self] articlesFromUrl,articlesFavorites in
             var newArticles = articlesFromUrl

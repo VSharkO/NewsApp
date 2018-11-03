@@ -15,10 +15,11 @@ protocol MainViewModelProtocol{
     func initData() -> Disposable
     func getNews() -> [Article]
     func setNewsToFavorites(index: Int)
-    func refreshData()
-    
+    func forceRefreshData()
+     func refreshData()
     
     var viewReloadData: PublishSubject<Bool>{get}
     var viewShowLoader: PublishSubject<Bool>{get}
     var viewShowSpinner: PublishSubject<Bool>{get}
+    
 }

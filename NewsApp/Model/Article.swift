@@ -50,7 +50,7 @@ class DbArticle: Object{
         title = articleTitle
         urlToImage = articleUrlToImage
         articleDescription = description
-        timeOfCreation = Date().timeIntervalSince1970
+        timeOfCreation = articleTimeOfCreation
         isFavorite = articleIsFavorite
     }
 }
@@ -68,7 +68,7 @@ class DbArticleFavorites: Object{
         title = articleTitle
         urlToImage = articleUrlToImage
         articleDescription = description
-        timeOfCreation = Date().timeIntervalSince1970
+        timeOfCreation = articleTimeOfCreation
         isFavorite = articleIsFavorite
     }
 }

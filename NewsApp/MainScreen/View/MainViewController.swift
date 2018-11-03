@@ -33,7 +33,7 @@ class MainViewController: UITableViewController,LoaderManager{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.refreshData() //TODO: ovdje logiku ispraviti
+        viewModel.refreshData()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
@@ -131,7 +131,7 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     @objc func refreshNewsData(){
-        viewModel.refreshData()
+        viewModel.forceRefreshData()
     }
     
     @objc func buttonClicked(sender:UIButton)
