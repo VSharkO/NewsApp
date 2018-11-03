@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 import RealmSwift
 
-//da komunicira sa viewModelima preko protokola? rx?
 class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     
     let db: Realm
@@ -49,19 +48,20 @@ class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     
     func putArticlesToDb(articles: [Article]){
         var dbArticles: [DbArticle] = []
-        var isFavorite = false
+//        var isFavorite = false
         for article in articles{
-            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil{
-                isFavorite = true
-            }
-            dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: isFavorite))
-            if article.isFavorite || isFavorite{
-                putArticleToFavoriteDb(article: article)
-            }else{
-                removeFromFavoriteDb(article: article)
-            }
-            isFavorite = false
+//            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil{
+//                isFavorite = true
+//            }
+            dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: article.isFavorite))// isFavorite))
+//            if article.isFavorite || isFavorite{
+//                putArticleToFavoriteDb(article: article)
+//            }else{
+//                removeFromFavoriteDb(article: article)
+//            }
+//            isFavorite = false
         }
+    
         try! db.write {
             db.delete(db.objects(DbArticle.self))
             db.add(dbArticles)
@@ -73,7 +73,7 @@ class ArticleRepository: Interactor,ArticleRepositoryProtocol{
             return Observable.just([])
         }
         let dbArticlesArray = db.objects(DbArticleFavorites.self).sorted(by: {(firstNews, secondNews) -> Bool in
-            return firstNews.timeOfCreation < secondNews.timeOfCreation
+            return firstNews.timeOfCreation > secondNews.timeOfCreation
         })
         var articleArray = [Article]()
         for article in dbArticlesArray{

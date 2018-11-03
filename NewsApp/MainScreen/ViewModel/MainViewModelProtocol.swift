@@ -16,7 +16,7 @@ protocol MainViewModelProtocol{
     func getNews() -> [Article]
     func setNewsToFavorites(index: Int)
     func forceRefreshData()
-     func refreshData()
+    func refreshData()
     
     var viewReloadData: PublishSubject<Bool>{get}
     var viewShowLoader: PublishSubject<Bool>{get}

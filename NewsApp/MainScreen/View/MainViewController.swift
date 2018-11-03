@@ -24,6 +24,7 @@ class MainViewController: UITableViewController,LoaderManager{
         setupRefreshControl()
         self.viewModel = MainViewModel()
         initSubscripts()
+        
         //Init disposebles in presenter
         viewModel.initData().disposed(by: disposeBag)
         viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
@@ -34,7 +35,7 @@ class MainViewController: UITableViewController,LoaderManager{
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         viewModel.refreshData()
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
+//        print(Realm.Configuration.defaultConfiguration.fileURL!)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -57,7 +58,6 @@ class MainViewController: UITableViewController,LoaderManager{
         else{
             return TableViewCell()
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -71,6 +71,7 @@ class MainViewController: UITableViewController,LoaderManager{
     private func setupNavigationBar(){
         navigationItem.title = "New Articles"
     }
+    
     private func setupRefreshControl(){
         refreshController = UIRefreshControl()
         if #available(iOS 10.0, *) {

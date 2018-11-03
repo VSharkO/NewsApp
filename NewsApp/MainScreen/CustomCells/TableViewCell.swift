@@ -54,7 +54,6 @@ class TableViewCell: UITableViewCell{
     }
     
     func setupConstraints(){
-        
         NSLayoutConstraint.activate([
             photo.topAnchor.constraint(equalTo: contentView.topAnchor),
             photo.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
