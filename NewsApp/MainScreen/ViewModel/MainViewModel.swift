@@ -28,6 +28,8 @@ class MainViewModel : MainViewModelProtocol{
     func initData() -> Disposable{
         return refreshCurrentData.flatMap({_ -> Observable<[Article]> in
             return self.articleRepository.getArticlesFromDb()})
+            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler())
             .subscribe(onNext: {[unowned self] articles in
                 if articles.isEmpty{
                     self.showSpinner.onNext(true)
