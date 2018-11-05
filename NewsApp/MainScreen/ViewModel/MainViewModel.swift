@@ -54,11 +54,11 @@ class MainViewModel : MainViewModelProtocol{
     
     func initGetingDataFromApi() -> Disposable{
         return forceRefreshFromApi.flatMap({ _ -> Observable<([Article],[Article])> in
-            Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())})
-            .subscribe(onNext: { [unowned self] articlesFromUrl,articlesFavorites in
-                var newArticles = articlesFromUrl
-                let favoriteArticles = articlesFavorites
-                if articlesFavorites.count>0{
+            Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())}).map{
+                (articles,favorites) -> [Article] in
+                var newArticles = articles
+                let favoriteArticles = favorites
+                if favoriteArticles.count>0{
                     for i in 0...newArticles.count-1{
                         if favoriteArticles.contains(where: {favorite -> Bool in
                             return newArticles[i].title == favorite.title
@@ -67,13 +67,15 @@ class MainViewModel : MainViewModelProtocol{
                         }
                     }
                 }
-                self.data = newArticles
+                return newArticles
+            }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .observeOn(MainScheduler())
+            .subscribe(onNext: { [unowned self] articles in
+                self.data = articles
                 self.articleRepository.putArticlesToDb(articles: self.data)
                 self.viewReloadData.onNext(true)
                 self.viewShowLoader.onNext(false)
                 self.viewShowSpinner.onNext(false)
-                
-                
             })
     }
     
