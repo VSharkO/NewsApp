@@ -12,6 +12,20 @@ import RealmSwift
 
 class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     
+    func setIsFavoriteForArticle(article: Article, isFavorite: Bool) {
+        do {
+            let db = try Realm()
+            guard let articleToChange = db.objects(DbArticle.self).filter({$0.title == article.title}).first else{
+                return
+            }
+            try! db.write {
+                articleToChange.isFavorite = isFavorite
+            }
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
     func getResponseFromUrl() -> Observable<[Article]>{
         return getDataFromURL(link: Constants.url)
     }
@@ -57,18 +71,8 @@ class ArticleRepository: Interactor,ArticleRepositoryProtocol{
         do {
             let db = try Realm()
             var dbArticles: [DbArticle] = []
-            //        var isFavorite = false
             for article in articles{
-                //            if db.objects(DbArticleFavorites.self).filter({$0.title == article.title}).first != nil{
-                //                isFavorite = true
-                //            }
-                dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: article.isFavorite))// isFavorite))
-                //            if article.isFavorite || isFavorite{
-                //                putArticleToFavoriteDb(article: article)
-                //            }else{
-                //                removeFromFavoriteDb(article: article)
-                //            }
-                //            isFavorite = false
+                dbArticles.append(DbArticle(articleTitle: article.title, articleUrlToImage: article.urlToImage, description: article.description, articleTimeOfCreation: article.timeOfCreation, articleIsFavorite: article.isFavorite))
             }
             
             try! db.write {

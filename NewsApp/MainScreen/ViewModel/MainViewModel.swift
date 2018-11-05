@@ -52,25 +52,28 @@ class MainViewModel : MainViewModelProtocol{
         refreshCurrentData.onNext(true)
     }
     
-    func initGetingDataFromRepository() -> Disposable{
+    func initGetingDataFromApi() -> Disposable{
         return forceRefreshFromApi.flatMap({ _ -> Observable<([Article],[Article])> in
             Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())})
             .subscribe(onNext: { [unowned self] articlesFromUrl,articlesFavorites in
                 var newArticles = articlesFromUrl
-                var favoriteArticles = articlesFavorites
+                let favoriteArticles = articlesFavorites
                 if articlesFavorites.count>0{
                     for i in 0...newArticles.count-1{
-                        for j in 0...articlesFavorites.count-1{
-                            if newArticles[i].title == favoriteArticles[j].title{
-                                newArticles[i].isFavorite = true
-                            }
+                        if favoriteArticles.contains(where: {favorite -> Bool in
+                            return newArticles[i].title == favorite.title
+                        }){
+                            newArticles[i].isFavorite = true
                         }
                     }
                 }
                 self.data = newArticles
+                self.articleRepository.putArticlesToDb(articles: self.data)
+                self.viewReloadData.onNext(true)
                 self.viewShowLoader.onNext(false)
                 self.viewShowSpinner.onNext(false)
-                self.viewReloadData.onNext(true)
+                
+                
             })
     }
     
@@ -89,12 +92,12 @@ class MainViewModel : MainViewModelProtocol{
         if(data[index].isFavorite){
             data[index].isFavorite = false
             articleRepository.removeFromFavoriteDb(article: data[index])
-            articleRepository.putArticlesToDb(articles: data)
+            articleRepository.setIsFavoriteForArticle(article: data[index], isFavorite: false)
             viewReloadData.onNext(true)
         }else{
             data[index].isFavorite = true
             articleRepository.putArticleToFavoriteDb(article: data[index])
-            articleRepository.putArticlesToDb(articles: data)
+            articleRepository.setIsFavoriteForArticle(article: data[index], isFavorite: true)
             viewReloadData.onNext(true)
         }
     }

@@ -11,7 +11,7 @@ import RxSwift
 
 protocol MainViewModelProtocol{
     func initSpinnerLogic() -> Disposable
-    func initGetingDataFromRepository() -> Disposable
+    func initGetingDataFromApi() -> Disposable
     func initData() -> Disposable
     func getNews() -> [Article]
     func setNewsToFavorites(index: Int)

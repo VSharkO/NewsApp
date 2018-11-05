@@ -14,4 +14,5 @@ protocol ArticleRepositoryProtocol{
     func getArticlesFromDb() -> Observable<[Article]>
     func getFavoriteArticlesFromDb() -> Observable<[Article]>
     func removeFromFavoriteDb(article: Article)
+    func setIsFavoriteForArticle(article: Article, isFavorite: Bool)
 }
