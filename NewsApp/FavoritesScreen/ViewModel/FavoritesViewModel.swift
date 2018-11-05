@@ -12,13 +12,13 @@ import RxSwift
 class FavoritesViewModel : FavoritesViewModelProtocol{
     
     var viewReloadData = PublishSubject<Bool>()
-    var refresh = PublishSubject<Bool>()
+    var loadData = PublishSubject<Bool>()
     var articleRepository : ArticleRepositoryProtocol
     var data : [Article] = []
     
     init() {
         articleRepository = ArticleRepository()
-        refresh.onNext(true)
+        loadData.onNext(true)
     }
     
     func getNews() -> [Article]{
@@ -26,7 +26,7 @@ class FavoritesViewModel : FavoritesViewModelProtocol{
     }
     
     func initGetingDataFromRepository() -> Disposable{
-        return refresh.flatMap{_ -> Observable<[Article]> in
+        return loadData.flatMap{_ -> Observable<[Article]> in
             return self.articleRepository.getFavoriteArticlesFromDb()
             }.subscribe(onNext: {[unowned self] articles in
                 self.data = articles
@@ -35,13 +35,13 @@ class FavoritesViewModel : FavoritesViewModelProtocol{
     }
     
     func refreshData(){
-        refresh.onNext(true)
+        loadData.onNext(true)
     }
     
     func removeNewsFromFavorites(index: Int){
         articleRepository.removeFromFavoriteDb(article: data[index])
         data.remove(at: index)
-        refresh.onNext(true)
+        loadData.onNext(true)
     }
 }
 

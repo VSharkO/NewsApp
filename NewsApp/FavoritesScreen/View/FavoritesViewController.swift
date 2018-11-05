@@ -68,7 +68,6 @@ class FavoritesViewController:  UITableViewController{
     }
     
     private func initSubscripts(){
-        //reloading data
         viewModel.viewReloadData.subscribe(onNext: { [unowned self] reload in
             if reload{
                 self.reloadData()
