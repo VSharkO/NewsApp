@@ -16,25 +16,26 @@ protocol Interactor{
 
 extension Interactor{
     func getDataFromURL(link: String) -> Observable<[Article]>{
-        return Observable.create{ observer -> Disposable in
-            let request = Alamofire.request(link)
-                .validate()
-                .responseJSON{response in
-                    guard let data = response.data else{
-                        observer.onError(response.error!)
-                        return
-                    }
-                    do{
-                        let articles = try JSONDecoder().decode(Response.self, from: data)
-                        observer.onNext(articles.articles)
-                    } catch {
-                        observer.onError(error)
-                    }
+        return Observable.deferred({
+            return Observable.create{ observer -> Disposable in
+                let request = Alamofire.request(link)
+                    .validate()
+                    .responseJSON{response in
+                        guard let data = response.data else{
+                            observer.onError(response.error!)
+                            return
+                        }
+                        do{
+                            let articles = try JSONDecoder().decode(Response.self, from: data)
+                            observer.onNext(articles.articles)
+                        } catch {
+                            observer.onError(error)
+                        }
+                }
+                return Disposables.create{
+                    request.cancel()
+                }
             }
-            //rijesiti logiku za disposanje
-            return Disposables.create{
-                request.cancel()
             }
-        }
-    }
+        )}
 }

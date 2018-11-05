@@ -17,6 +17,13 @@ protocol LoaderManager{
     func removeLoader(loader :UIView)
 }
 
+struct funcForQueues{
+    static func currentQueueName() -> String? {
+        let name = __dispatch_queue_get_label(nil)
+        return String(cString: name, encoding: .utf8)
+    }
+}
+
 extension LoaderManager {
     
     func displayLoader(onView : UIView) -> UIView {

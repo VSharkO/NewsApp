@@ -31,25 +31,26 @@ class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     }
     
     func getArticlesFromDb() -> Observable<[Article]>{
-        
-        var articleArray = [Article]()
-        do {
-            let db = try Realm()
-            guard !db.isEmpty else{
-                return Observable.just([])
+        return Observable.deferred({
+            var articleArray = [Article]()
+            do {
+                let db = try Realm()
+                guard !db.isEmpty else{
+                    return Observable.just([])
+                }
+                let dbArticlesArray = db.objects(DbArticle.self)
+                
+                for article in dbArticlesArray{
+                    var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
+                    currentArticle.isFavorite = article.isFavorite
+                    articleArray.append(currentArticle)
+                }
+            } catch let error as NSError {
+                print(error)
             }
-            let dbArticlesArray = db.objects(DbArticle.self)
             
-            for article in dbArticlesArray{
-                var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
-                currentArticle.isFavorite = article.isFavorite
-                articleArray.append(currentArticle)
-            }
-        } catch let error as NSError {
-            print(error)
-        }
-        
-        return Observable.just(articleArray)
+            return Observable.just(articleArray)
+        })
     }
     
     func putArticleToFavoriteDb(article: Article){
@@ -87,50 +88,27 @@ class ArticleRepository: Interactor,ArticleRepositoryProtocol{
     }
     
     func getFavoriteArticlesFromDb() -> Observable<[Article]>{
-//        return Observable.create{ observer -> Disposable in
-//            var articleArray = [Article]()
-//            do {
-//                let db = try Realm()
-//                guard !db.isEmpty else{
-//                    return Disposables.create{
-//                        observer.onNext([])
-//                    }
-//                }
-//                let dbArticlesArray = db.objects(DbArticleFavorites.self).sorted(by: {(firstNews, secondNews) -> Bool in
-//                    return firstNews.timeOfCreation > secondNews.timeOfCreation
-//                })
-//                for article in dbArticlesArray{
-//                    var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
-//                    currentArticle.isFavorite = article.isFavorite
-//                    articleArray.append(currentArticle)
-//                }
-//                observer.onNext(articleArray)
-//            } catch let error as NSError {
-//                print(error)
-//            }
-//            return Disposables.create{
-//                observer.onNext(articleArray)
-//            }
-//        }
-        var articleArray = [Article]()
-        do {
-            let db = try Realm()
-            guard !db.isEmpty else{
-                return Observable.just([])
+        return Observable.deferred({
+            var articleArray = [Article]()
+            do {
+                let db = try Realm()
+                guard !db.isEmpty else{
+                    return Observable.just([])
+                }
+                let dbArticlesArray = db.objects(DbArticleFavorites.self).sorted(by: {(firstNews, secondNews) -> Bool in
+                    return firstNews.timeOfCreation > secondNews.timeOfCreation
+                })
+                for article in dbArticlesArray{
+                    var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
+                    currentArticle.isFavorite = article.isFavorite
+                    articleArray.append(currentArticle)
+                }
+                
+            } catch let error as NSError {
+                print(error)
             }
-            let dbArticlesArray = db.objects(DbArticleFavorites.self).sorted(by: {(firstNews, secondNews) -> Bool in
-                return firstNews.timeOfCreation > secondNews.timeOfCreation
-            })
-            for article in dbArticlesArray{
-                var currentArticle = Article(title: article.title, image: article.urlToImage, description: article.articleDescription)
-                currentArticle.isFavorite = article.isFavorite
-                articleArray.append(currentArticle)
-            }
-
-        } catch let error as NSError {
-            print(error)
-        }
-        return Observable.just(articleArray)
+            return Observable.just(articleArray)
+        })
     }
     
     func removeFromFavoriteDb(article: Article){

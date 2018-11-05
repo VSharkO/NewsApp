@@ -28,8 +28,7 @@ class MainViewModel : MainViewModelProtocol{
     func initData() -> Disposable{
         return refreshCurrentData.flatMap({_ -> Observable<[Article]> in
             return self.articleRepository.getArticlesFromDb()})
-            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .observeOn(MainScheduler())
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: {[unowned self] articles in
                 if articles.isEmpty{
                     self.showSpinner.onNext(true)
@@ -56,8 +55,11 @@ class MainViewModel : MainViewModelProtocol{
     
     func initGetingDataFromApi() -> Disposable{
         return forceRefreshFromApi.flatMap({ _ -> Observable<([Article],[Article])> in
-            Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())}).map{
+            Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())})
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .map{
                 (articles,favorites) -> [Article] in
+                print(funcForQueues.currentQueueName() ?? "nema")
                 var newArticles = articles
                 let favoriteArticles = favorites
                 if favoriteArticles.count>0{
@@ -71,8 +73,9 @@ class MainViewModel : MainViewModelProtocol{
                 }
                 return newArticles
             }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .observeOn(MainScheduler())
+            .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] articles in
+                print(funcForQueues.currentQueueName() ?? "nema")
                 self.data = articles
                 self.articleRepository.putArticlesToDb(articles: self.data)
                 self.viewReloadData.onNext(true)
