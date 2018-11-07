@@ -13,7 +13,7 @@ class FavoritesCoordinator: Coordinator,CoordinatorDelegate,SingleScreenCoordina
     
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
-    var controller: FavoritesViewController
+    private var controller: FavoritesViewController
     
     init(presenter: UINavigationController){
         self.presenter = UINavigationController()

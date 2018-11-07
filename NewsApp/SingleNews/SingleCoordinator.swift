@@ -13,7 +13,7 @@ class SingleCoordinator: Coordinator, CoordinatorDelegate{
     
     var childCoordinators: [Coordinator]=[]
     var presenter: UINavigationController
-    var controller: SingleViewController
+    private var controller: SingleViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     
     init(presenter: UINavigationController, singleArticle: Article) {

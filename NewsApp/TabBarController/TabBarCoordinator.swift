@@ -11,9 +11,9 @@ import UIKit
 class TabBarCoordinator :Coordinator{
     var presenter: UINavigationController
     var childCoordinators: [Coordinator] = []
-    var controller: UITabBarController
-    var mainCoordinator: MainScreenCoordinator!
-    var favoritesCoordinator: FavoritesCoordinator!
+    private var controller: UITabBarController
+    var mainCoordinator: Coordinator!
+    var favoritesCoordinator: Coordinator!
     
     init(presenter: UINavigationController) {
         self.presenter = presenter
@@ -36,11 +36,6 @@ class TabBarCoordinator :Coordinator{
     func start() {
         mainCoordinator.start()
         favoritesCoordinator.start()
-        
-       
-        
-        
-        
         presenter.pushViewController(controller, animated: true)
         
     }
