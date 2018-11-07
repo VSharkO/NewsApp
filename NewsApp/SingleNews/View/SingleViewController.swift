@@ -49,9 +49,8 @@ class SingleViewController: UIViewController, LoaderManager{
         return descriptionText
     }()
     
-    init(singleArticle: Article) { //Ili i za ovo praviti viewModel?
+    init() {
         super.init(nibName: nil, bundle: nil)
-        viewModel = SingleViewModel(article: singleArticle)
         setupViews()
         setupConstraints()
         initSubscripts()

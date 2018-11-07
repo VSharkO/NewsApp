@@ -16,6 +16,7 @@ class MainViewModel : MainViewModelProtocol{
     var forceRefreshFromApi = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
     var refreshCurrentData = PublishSubject<Bool>()
+    weak var mainCoordinatorDelegate: NextScreenCoordinatorDelegate?
     
     var viewReloadData = PublishSubject<Bool>()
     var viewShowLoader = PublishSubject<Bool>()
@@ -56,10 +57,8 @@ class MainViewModel : MainViewModelProtocol{
     func initGetingDataFromApi() -> Disposable{
         return forceRefreshFromApi.flatMap({ _ -> Observable<([Article],[Article])> in
             Observable.zip(self.articleRepository.getResponseFromUrl(), self.articleRepository.getFavoriteArticlesFromDb())})
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .map{
                 (articles,favorites) -> [Article] in
-                print(funcForQueues.currentQueueName() ?? "nema")
                 var newArticles = articles
                 let favoriteArticles = favorites
                 if favoriteArticles.count>0{
@@ -72,10 +71,11 @@ class MainViewModel : MainViewModelProtocol{
                     }
                 }
                 return newArticles
-            }.subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))
-            .observeOn(MainScheduler.instance)
+            }
+//            .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .background))    ---> zbog alamofire(on sam request odradi na offThreadu) će se svakako observati na main threadu i neće se
+//            .observeOn(MainScheduler.instance)                                       započeti na offthreadu a nakon toga je skupo prelaziti na drugi thread implicitno, pa je najbolje ostati na
+//                                                                                     main threadu.
             .subscribe(onNext: { [unowned self] articles in
-                print(funcForQueues.currentQueueName() ?? "nema")
                 self.data = articles
                 self.articleRepository.putArticlesToDb(articles: self.data)
                 self.viewReloadData.onNext(true)

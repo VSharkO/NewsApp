@@ -13,6 +13,7 @@ class SingleViewModel : SingleViewModelProtocol{
     
     var singleArticle: Article!
     var viewSetData = PublishSubject<Article>()
+    
     init(article: Article) {
         singleArticle = article
     }

@@ -14,12 +14,12 @@ class FavoritesViewController:  UITableViewController{
     
     var viewModel : FavoritesViewModelProtocol!
     var disposeBag: DisposeBag = DisposeBag()
+    var favoritesCoordinatorDelegate: NextScreenCoordinatorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
-        self.viewModel = FavoritesViewModel()
         initSubscripts()
         viewModel.initGetingDataFromRepository().disposed(by: disposeBag)
     }
@@ -76,7 +76,7 @@ class FavoritesViewController:  UITableViewController{
     }
     
     @objc func moveToSingleScreenWithIndex(clickedNews: Int){
-        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
+        favoritesCoordinatorDelegate?.openNextScreen(article: viewModel.getNews()[clickedNews])
     }
     
     @objc func buttonClicked(sender:UIButton)

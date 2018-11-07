@@ -11,25 +11,27 @@ import RxSwift
 import RealmSwift
 class MainViewController: UITableViewController,LoaderManager{
     
-    
     var viewModel : MainViewModelProtocol!
     var loader : UIView?
     var refreshController: UIRefreshControl?
     var disposeBag: DisposeBag = DisposeBag()
-
+    var mainCoordinatorDelegate: NextScreenCoordinatorDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
-        self.viewModel = MainViewModel()
-        initSubscripts()
         
+        initSubscripts()
         //Init disposebles in presenter
         viewModel.initData().disposed(by: disposeBag)
         viewModel.initGetingDataFromApi().disposed(by: disposeBag)
         viewModel.initSpinnerLogic().disposed(by: disposeBag)
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -128,7 +130,7 @@ class MainViewController: UITableViewController,LoaderManager{
     }
     
     @objc func moveToSingleScreenWithIndex(clickedNews: Int){
-        navigationController?.pushViewController(SingleViewController(singleArticle: viewModel.getNews()[clickedNews]), animated: true)
+        mainCoordinatorDelegate?.openNextScreen(article: viewModel.getNews()[clickedNews])
     }
     
     @objc func refreshNewsData(){

@@ -15,6 +15,14 @@
 		D5455C0A2180467E0006DA1F /* ArticleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5455C092180467E0006DA1F /* ArticleRepository.swift */; };
 		D579F9C521883032004D98A5 /* SingleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579F9C421883032004D98A5 /* SingleViewModel.swift */; };
 		D579F9C82188305F004D98A5 /* SingleViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D579F9C72188305F004D98A5 /* SingleViewModelProtocol.swift */; };
+		D57DC7B82192CE4500086423 /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57DC7B72192CE4500086423 /* FavoritesCoordinator.swift */; };
+		D57DC7BA2192D81500086423 /* SingleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57DC7B92192D81500086423 /* SingleCoordinator.swift */; };
+		D597C5CD2191C10B00E433BC /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5CC2191C10B00E433BC /* AppCoordinator.swift */; };
+		D597C5CF2191C18A00E433BC /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5CE2191C18A00E433BC /* Coordinator.swift */; };
+		D597C5D12191C1B100E433BC /* CoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5D02191C1B100E433BC /* CoordinatorDelegate.swift */; };
+		D597C5D52191DAF900E433BC /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5D42191DAF900E433BC /* TabBarCoordinator.swift */; };
+		D597C5D72191E47700E433BC /* MainScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5D62191E47700E433BC /* MainScreenCoordinator.swift */; };
+		D597C5DB2191E7B000E433BC /* NextScreenCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D597C5DA2191E7B000E433BC /* NextScreenCoordinatorDelegate.swift */; };
 		D5A11F63218C54ED00450E38 /* ArticleRepositoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A11F62218C54ED00450E38 /* ArticleRepositoryProtocol.swift */; };
 		D5A2E6DB2189DABE00195919 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A2E6DA2189DABE00195919 /* FavoritesViewController.swift */; };
 		D5A2E6DD2189DB6000195919 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A2E6DC2189DB6000195919 /* FavoritesViewModel.swift */; };
@@ -50,6 +58,14 @@
 		D5455C092180467E0006DA1F /* ArticleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleRepository.swift; sourceTree = "<group>"; };
 		D579F9C421883032004D98A5 /* SingleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewModel.swift; sourceTree = "<group>"; };
 		D579F9C72188305F004D98A5 /* SingleViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewModelProtocol.swift; sourceTree = "<group>"; };
+		D57DC7B72192CE4500086423 /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
+		D57DC7B92192D81500086423 /* SingleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCoordinator.swift; sourceTree = "<group>"; };
+		D597C5CC2191C10B00E433BC /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		D597C5CE2191C18A00E433BC /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		D597C5D02191C1B100E433BC /* CoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorDelegate.swift; sourceTree = "<group>"; };
+		D597C5D42191DAF900E433BC /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		D597C5D62191E47700E433BC /* MainScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenCoordinator.swift; sourceTree = "<group>"; };
+		D597C5DA2191E7B000E433BC /* NextScreenCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextScreenCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		D5A11F62218C54ED00450E38 /* ArticleRepositoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleRepositoryProtocol.swift; sourceTree = "<group>"; };
 		D5A2E6DA2189DABE00195919 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		D5A2E6DC2189DB6000195919 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
@@ -126,6 +142,8 @@
 				D5DC45F8217DEE6800709CD2 /* ViewModel */,
 				D5DC45F7217DEE4D00709CD2 /* View */,
 				D5DC45FE217DF4ED00709CD2 /* CustomCells */,
+				D597C5D62191E47700E433BC /* MainScreenCoordinator.swift */,
+				D597C5DA2191E7B000E433BC /* NextScreenCoordinatorDelegate.swift */,
 			);
 			path = MainScreen;
 			sourceTree = "<group>";
@@ -135,6 +153,7 @@
 			children = (
 				D579F9C62188303A004D98A5 /* ViewModel */,
 				D5455C00218038C90006DA1F /* View */,
+				D57DC7B92192D81500086423 /* SingleCoordinator.swift */,
 			);
 			path = SingleNews;
 			sourceTree = "<group>";
@@ -174,6 +193,16 @@
 			path = "New Group";
 			sourceTree = "<group>";
 		};
+		D597C5CB2191C0ED00E433BC /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				D597C5CC2191C10B00E433BC /* AppCoordinator.swift */,
+				D597C5CE2191C18A00E433BC /* Coordinator.swift */,
+				D597C5D02191C1B100E433BC /* CoordinatorDelegate.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 		D5A11F5E218C3A4F00450E38 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +225,7 @@
 			children = (
 				D5A11F5F218C3A6F00450E38 /* ViewModel */,
 				D5A11F5E218C3A4F00450E38 /* View */,
+				D57DC7B72192CE4500086423 /* FavoritesCoordinator.swift */,
 			);
 			path = FavoritesScreen;
 			sourceTree = "<group>";
@@ -223,6 +253,7 @@
 		D5DC45CC217DDE9B00709CD2 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
+				D597C5CB2191C0ED00E433BC /* Coordinators */,
 				D5A2E6D92189DA9900195919 /* FavoritesScreen */,
 				D5EEA263218876820042870C /* TabBarController */,
 				D5455C082180466E0006DA1F /* ArticleRepository */,
@@ -284,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				D5EEA264218876A70042870C /* TabBarController.swift */,
+				D597C5D42191DAF900E433BC /* TabBarCoordinator.swift */,
 			);
 			path = TabBarController;
 			sourceTree = "<group>";
@@ -459,11 +491,17 @@
 			files = (
 				D5A2E6DD2189DB6000195919 /* FavoritesViewModel.swift in Sources */,
 				D5DC45F4217DEE2D00709CD2 /* MainViewModelProtocol.swift in Sources */,
+				D597C5DB2191E7B000E433BC /* NextScreenCoordinatorDelegate.swift in Sources */,
 				D5EEA265218876A70042870C /* TabBarController.swift in Sources */,
+				D57DC7B82192CE4500086423 /* FavoritesCoordinator.swift in Sources */,
+				D597C5D12191C1B100E433BC /* CoordinatorDelegate.swift in Sources */,
 				D5455C0A2180467E0006DA1F /* ArticleRepository.swift in Sources */,
 				D5DC45FD217DF13300709CD2 /* Article.swift in Sources */,
 				D579F9C521883032004D98A5 /* SingleViewModel.swift in Sources */,
+				D597C5CF2191C18A00E433BC /* Coordinator.swift in Sources */,
+				D597C5CD2191C10B00E433BC /* AppCoordinator.swift in Sources */,
 				D530E72A217F52E000D3FE1C /* Common.swift in Sources */,
+				D57DC7BA2192D81500086423 /* SingleCoordinator.swift in Sources */,
 				D5A2E6DB2189DABE00195919 /* FavoritesViewController.swift in Sources */,
 				D5A2E6DF2189DBA400195919 /* FavoritesViewModelProtocol.swift in Sources */,
 				D5A11F63218C54ED00450E38 /* ArticleRepositoryProtocol.swift in Sources */,
@@ -471,7 +509,9 @@
 				D5DC45F2217DE10500709CD2 /* TableViewCell.swift in Sources */,
 				D530E727217F4A4700D3FE1C /* SingleViewController.swift in Sources */,
 				D579F9C82188305F004D98A5 /* SingleViewModelProtocol.swift in Sources */,
+				D597C5D52191DAF900E433BC /* TabBarCoordinator.swift in Sources */,
 				D5DC45CE217DDE9B00709CD2 /* AppDelegate.swift in Sources */,
+				D597C5D72191E47700E433BC /* MainScreenCoordinator.swift in Sources */,
 				D530E71B217F008900D3FE1C /* Interactor.swift in Sources */,
 				D5DC45F6217DEE4400709CD2 /* MainViewModel.swift in Sources */,
 			);

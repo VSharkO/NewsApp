@@ -11,16 +11,17 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+    var coordinator: Coordinator!
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabViewController = TabBarController()
-        if let rootWindow = window{
-            rootWindow.rootViewController = tabViewController
-            rootWindow.makeKeyAndVisible()
-            return true
-        }else{        
-            return false
-        }
+        window?.makeKeyAndVisible()
+        let appNavigationController = UINavigationController()
+        window?.rootViewController = appNavigationController
+        let appCoordinator = AppCoordinator(presneter: appNavigationController)
+        appCoordinator.start()
+        self.coordinator = appCoordinator
+        return true
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
