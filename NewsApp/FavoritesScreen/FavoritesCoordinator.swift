@@ -9,13 +9,13 @@
 import Foundation
 import UIKit
 
-class FavoritesCoordinator: Coordinator,CoordinatorDelegate,NextScreenCoordinatorDelegate,ParentCoordinatorDelegate{
+class FavoritesCoordinator: Coordinator,CoordinatorDelegate,SingleScreenCoordinatorDelegate,ParentCoordinatorDelegate{
     
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
     var controller: FavoritesViewController
     
-    init() {
+    init(presenter: UINavigationController){
         self.presenter = UINavigationController()
         let favoritesViewController = FavoritesViewController()
         let favoritesViewModel = FavoritesViewModel()
@@ -24,8 +24,9 @@ class FavoritesCoordinator: Coordinator,CoordinatorDelegate,NextScreenCoordinato
     }
     
     func start() {
-        controller.favoritesCoordinatorDelegate = self
         presenter.pushViewController(controller, animated: true)
+        controller.favoritesCoordinatorDelegate = self
+        
     }
     
     func viewHasFinished() {
@@ -33,7 +34,7 @@ class FavoritesCoordinator: Coordinator,CoordinatorDelegate,NextScreenCoordinato
     }
     
     func openNextScreen(article: Article) {
-        let coordinator = SingleCoordinator(presenter: presenter, article: article)
+        let coordinator = SingleCoordinator(presenter: presenter, singleArticle: article)
         coordinator.parentCoordinatorDelegate = self
         coordinator.start()
         self.addChildCoordinator(childCoordinator: coordinator)

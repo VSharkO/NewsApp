@@ -15,23 +15,18 @@ class MainViewController: UITableViewController,LoaderManager{
     var loader : UIView?
     var refreshController: UIRefreshControl?
     var disposeBag: DisposeBag = DisposeBag()
-    var mainCoordinatorDelegate: NextScreenCoordinatorDelegate?
+    var mainCoordinatorDelegate: SingleScreenCoordinatorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         registerCells()
         setupRefreshControl()
-        
         initSubscripts()
         //Init disposebles in presenter
         viewModel.initData().disposed(by: disposeBag)
         viewModel.initGetingDataFromApi().disposed(by: disposeBag)
         viewModel.initSpinnerLogic().disposed(by: disposeBag)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -8,30 +8,30 @@
 
 import Foundation
 import UIKit
-class MainScreenCoordinator : Coordinator, NextScreenCoordinatorDelegate, ParentCoordinatorDelegate{
+class MainScreenCoordinator : Coordinator, SingleScreenCoordinatorDelegate, ParentCoordinatorDelegate{
 
     let controller: MainViewController
     var childCoordinators: [Coordinator] = []
     var presenter: UINavigationController
     
-    init() {
+    init(presenter: UINavigationController){
         self.presenter = UINavigationController()
         let mainViewController = MainViewController()
         let mainViewModel = MainViewModel()
         mainViewController.viewModel = mainViewModel
         controller = mainViewController
     }
-    
+  
     func start() {
-        controller.mainCoordinatorDelegate = self
         presenter.pushViewController(controller, animated: true)
+        controller.mainCoordinatorDelegate = self
     }
     
     func openNextScreen(article: Article) {
-        let coordinator = SingleCoordinator(presenter: self.presenter, article: article)
+        let coordinator = SingleCoordinator(presenter: presenter, singleArticle: article)
         coordinator.parentCoordinatorDelegate = self
-        coordinator.start()
         self.addChildCoordinator(childCoordinator: coordinator)
+        coordinator.start()
     }
     
     func viewHasFinished() {

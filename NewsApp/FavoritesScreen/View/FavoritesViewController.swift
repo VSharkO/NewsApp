@@ -14,7 +14,7 @@ class FavoritesViewController:  UITableViewController{
     
     var viewModel : FavoritesViewModelProtocol!
     var disposeBag: DisposeBag = DisposeBag()
-    var favoritesCoordinatorDelegate: NextScreenCoordinatorDelegate?
+    var favoritesCoordinatorDelegate: SingleScreenCoordinatorDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

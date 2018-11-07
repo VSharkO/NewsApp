@@ -16,7 +16,7 @@ class MainViewModel : MainViewModelProtocol{
     var forceRefreshFromApi = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
     var refreshCurrentData = PublishSubject<Bool>()
-    weak var mainCoordinatorDelegate: NextScreenCoordinatorDelegate?
+    weak var mainCoordinatorDelegate: SingleScreenCoordinatorDelegate?
     
     var viewReloadData = PublishSubject<Bool>()
     var viewShowLoader = PublishSubject<Bool>()

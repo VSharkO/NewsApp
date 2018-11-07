@@ -16,16 +16,16 @@ class SingleCoordinator: Coordinator, CoordinatorDelegate{
     var controller: SingleViewController
     weak var parentCoordinatorDelegate: ParentCoordinatorDelegate?
     
-    init(presenter: UINavigationController, article: Article) {
+    init(presenter: UINavigationController, singleArticle: Article) {
         self.presenter = presenter
         let singleController = SingleViewController()
-        let singleViewModel = SingleViewModel(article: article)
+        let singleViewModel = SingleViewModel(article: singleArticle)
         singleController.viewModel = singleViewModel
         controller = singleController
     }
     
     func start() {
-        presenter.pushViewController(controller, animated: true)
+        presenter.pushViewController(self.controller, animated: false)
     }
     
     func viewHasFinished() {

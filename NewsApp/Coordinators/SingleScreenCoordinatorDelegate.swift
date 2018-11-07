@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol NextScreenCoordinatorDelegate: CoordinatorDelegate {
+protocol SingleScreenCoordinatorDelegate: CoordinatorDelegate {
     func openNextScreen(article: Article)
 }
