@@ -17,7 +17,6 @@ class SingleViewModel : SingleViewModelProtocol{
     init(article: Article) {
         singleArticle = article
     }
-    
     func getData(){
         viewSetData.onNext(singleArticle)
     }
