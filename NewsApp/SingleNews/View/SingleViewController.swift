@@ -16,6 +16,7 @@ class SingleViewController: UIViewController, LoaderManager{
     var loader : UIView?
     var viewModel : SingleViewModelProtocol!
     var disposeBag: DisposeBag = DisposeBag()
+    weak var singleDelegate: CoordinatorDelegate?
     
     let rootView: UIView = {
         let view = UIView()
@@ -54,6 +55,17 @@ class SingleViewController: UIViewController, LoaderManager{
         setupViews()
         setupConstraints()
         initSubscripts()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if(isMovingFromParentViewController){
+            singleDelegate?.viewHasFinished()
+        }
+    }
+    
+    deinit {
+        print("da")
     }
     
     override func viewWillAppear(_ animated: Bool) {

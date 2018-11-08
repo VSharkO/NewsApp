@@ -26,6 +26,7 @@ class SingleCoordinator: Coordinator, CoordinatorDelegate{
     
     func start() {
         presenter.pushViewController(self.controller, animated: false)
+        controller.singleDelegate = self
     }
     
     func viewHasFinished() {
