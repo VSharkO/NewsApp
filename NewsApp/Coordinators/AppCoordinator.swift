@@ -13,8 +13,9 @@ class AppCoordinator: Coordinator {
     var presenter: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    init(presneter: UINavigationController){
-        self.presenter = presneter
+    init(window: UIWindow?){
+        presenter = UINavigationController()
+        window?.rootViewController = presenter
     }
     
     func start() {
