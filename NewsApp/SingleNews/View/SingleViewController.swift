@@ -65,7 +65,7 @@ class SingleViewController: UIViewController, LoaderManager{
     }
     
     deinit {
-        print("da")
+        print("deinit")
     }
     
     override func viewWillAppear(_ animated: Bool) {
