@@ -28,19 +28,19 @@ class MainViewModel : MainViewModelProtocol{
     
     func initData() -> Disposable{
         return refreshCurrentData.flatMap({_ -> Observable<[Article]> in
+            self.showSpinner.onNext(true)
             return self.articleRepository.getArticlesFromDb()})
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: {[unowned self] articles in
                 if articles.isEmpty{
-                    self.showSpinner.onNext(true)
                     self.forceRefreshFromApi.onNext(true)
                 }else{
                     if articles[0].timeOfCreation + 300 < Date().timeIntervalSince1970{
-                        self.showSpinner.onNext(true)
                         self.forceRefreshFromApi.onNext(true)
                     }else{
                         self.data = articles
                         self.viewReloadData.onNext(true)
+                        self.showSpinner.onNext(false)
                     }
                 }
             })

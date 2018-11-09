@@ -11,6 +11,8 @@ target 'NewsApp' do
     pod 'RxSwift',    '~> 4.0'
     pod 'RxCocoa',    '~> 4.0'
     pod 'RealmSwift'
+    pod 'RxTest',     '~> 4.0'
+    pod 'RxBlocking', '~> 4.0'
 
   target 'NewsAppTests' do
     inherit! :search_paths
