@@ -22,6 +22,8 @@ class MainViewModel : MainViewModelProtocol{
     var viewShowLoader = PublishSubject<Bool>()
     var viewShowSpinner = PublishSubject<Bool>()
     
+    
+    
     func getNews() -> [Article]{
         return data
     }

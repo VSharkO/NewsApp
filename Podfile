@@ -5,6 +5,11 @@ target 'NewsApp' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
+  def testing_pods
+    pod 'Quick'
+    pod 'Nimble'
+  end
+
   # Pods for NewsApp
     pod 'Alamofire', '~> 4.7'
     pod 'Kingfisher', '4.9.0'
@@ -17,6 +22,7 @@ target 'NewsApp' do
   target 'NewsAppTests' do
     inherit! :search_paths
     # Pods for testing
+      testing_pods
   end
 
 end
