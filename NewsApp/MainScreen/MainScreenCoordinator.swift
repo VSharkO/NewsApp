@@ -17,7 +17,7 @@ class MainScreenCoordinator : Coordinator, SingleScreenCoordinatorDelegate, Pare
     init(presenter: UINavigationController){
         self.presenter = UINavigationController()
         let mainViewController = MainViewController()
-        let mainViewModel = MainViewModel()
+        let mainViewModel = MainViewModel(repository: ArticleRepository()) //TODO napraviti repository da bude singleton?
         mainViewController.viewModel = mainViewModel
         controller = mainViewController
     }

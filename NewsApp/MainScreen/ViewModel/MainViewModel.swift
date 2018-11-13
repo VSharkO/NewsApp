@@ -11,7 +11,7 @@ import RxSwift
 
 class MainViewModel : MainViewModelProtocol{
   
-    var articleRepository = ArticleRepository()
+    var articleRepository: ArticleRepositoryProtocol!
     var data : [Article] = []
     var forceRefreshFromApi = PublishSubject<Bool>()
     var showSpinner = PublishSubject<Bool>()
@@ -26,6 +26,10 @@ class MainViewModel : MainViewModelProtocol{
     
     func getNews() -> [Article]{
         return data
+    }
+    
+    init(repository: ArticleRepositoryProtocol) {
+        articleRepository = repository
     }
     
     func initData() -> Disposable{

@@ -18,7 +18,7 @@ class FavoritesCoordinator: Coordinator,CoordinatorDelegate,SingleScreenCoordina
     init(presenter: UINavigationController){
         self.presenter = UINavigationController()
         let favoritesViewController = FavoritesViewController()
-        let favoritesViewModel = FavoritesViewModel()
+        let favoritesViewModel = FavoritesViewModel(repository: ArticleRepository()) //TODO napraviti repository da bude singleton?
         favoritesViewController.viewModel = favoritesViewModel
         controller = favoritesViewController
     }

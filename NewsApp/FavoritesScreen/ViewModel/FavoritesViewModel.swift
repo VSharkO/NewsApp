@@ -13,11 +13,11 @@ class FavoritesViewModel : FavoritesViewModelProtocol{
     
     var viewReloadData = PublishSubject<Bool>()
     var loadData = PublishSubject<Bool>()
-    var articleRepository : ArticleRepositoryProtocol
+    var articleRepository : ArticleRepositoryProtocol!
     var data : [Article] = []
     
-    init() {
-        articleRepository = ArticleRepository()
+    init(repository: ArticleRepository) {
+        articleRepository = repository
         loadData.onNext(true)
     }
     

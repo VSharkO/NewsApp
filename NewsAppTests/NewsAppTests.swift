@@ -24,7 +24,7 @@ class MainViewModelTests: QuickSpec {
             disposeBag = DisposeBag()
             scheduler = TestScheduler(initialClock: 0)
             
-            mainViewModel = MainViewModel()
+            mainViewModel = MainViewModel(repository: ArticleRepository()) //TODO: napraviti mock za repository
             mainViewModel.initData().disposed(by: disposeBag)
             mainViewModel.initGetingDataFromApi().disposed(by: disposeBag)
             mainViewModel.initSpinnerLogic().disposed(by: disposeBag)
@@ -97,5 +97,25 @@ class MainViewModelTests: QuickSpec {
             }
         }
         
+        describe("spinner state"){
+            context("on force refresh"){
+                it("is shown"){
+                    let showSpinnerSubscription = scheduler.createObserver(Bool.self)
+                    mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
+                    scheduler.start()
+                    mainViewModel.refreshCurrentData.onNext(true)
+                    expect(showSpinnerSubscription.events.first?.value.element).to(be(true))
+                }
+            }
+            context("after data is set"){
+                it("is hiden"){
+                    let showSpinnerSubscription = scheduler.createObserver(Bool.self)
+                    mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
+                    scheduler.start()
+                    mainViewModel.refreshCurrentData.onNext(true)
+                    expect(showSpinnerSubscription.events.last?.value.element).to(be(false))
+                }
+            }
+        }
     }
 }
