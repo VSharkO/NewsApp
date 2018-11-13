@@ -12,7 +12,7 @@ import RxSwift
 import RxBlocking
 @testable import NewsApp
 
-class NewsAppTests: XCTestCase {
+class MainViewModelTests: XCTestCase {
     
     var scheduler: TestScheduler!
     var disposeBag: DisposeBag!
@@ -45,7 +45,7 @@ class NewsAppTests: XCTestCase {
         
     }
     
-    func testIfDataCountChangeAfterRefrashing() {
+    func testDataCountChangeAfterRefrashing() {
         // 1. given
         
         
@@ -56,7 +56,7 @@ class NewsAppTests: XCTestCase {
         XCTAssertEqual(mainViewModel.data.count, 10, "there is no 10 articles in data field after refresh")
     }
     
-    func testIfSpinerIshownOnForceRefresh() {
+    func testSpinerIsShownOnForceRefresh() {
         // 1. given
         let showSpinnerSubscription = scheduler.createObserver(Bool.self)
         // 2. when
@@ -68,7 +68,19 @@ class NewsAppTests: XCTestCase {
         XCTAssertEqual(showSpinnerSubscription.events.first?.value.element, true , "spinner doesnt shown")
     }
     
-    func testIfFavoritesAreDeclaredAsFavorites() {
+    func testSpinerHideingAfterDataIsSet() {
+        // 1. given
+        let showSpinnerSubscription = scheduler.createObserver(Bool.self)
+        // 2. when
+        mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
+        scheduler.start()
+        
+        mainViewModel.refreshCurrentData.onNext(true)
+        // 3. then
+        XCTAssertEqual(showSpinnerSubscription.events.last?.value.element, false , "spinner doesent disappear")
+    }
+    
+    func testFavoritesAreDeclaredAsFavorites() {
         // 1. given
         var isValid = true
         var favoritesInData: [Article] = []
