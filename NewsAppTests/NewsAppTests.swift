@@ -75,7 +75,6 @@ class MainViewModelTests: QuickSpec {
             context("in elements of data field"){
                 it("is set correct"){
                     var isValid = true
-                    var favoritesInData: [Article] = []
                     var favorites: [Article]
                     do {
                         favorites = try mainViewModel.articleRepository.getFavoriteArticlesFromDb().toBlocking().toArray()[0]
@@ -88,7 +87,6 @@ class MainViewModelTests: QuickSpec {
                         if favorites.contains(where: { favorite -> Bool in
                             favorite.title == article.title
                         }){
-                            favoritesInData.append(article)
                             isValid = article.isFavorite
                             break
                         }
