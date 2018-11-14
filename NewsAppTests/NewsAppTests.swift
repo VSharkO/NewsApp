@@ -11,6 +11,7 @@ import RxSwift
 import RxBlocking
 import Quick
 import Nimble
+import Cuckoo
 @testable import NewsApp
 
 class MainViewModelTests: QuickSpec {
@@ -19,12 +20,13 @@ class MainViewModelTests: QuickSpec {
         var scheduler: TestScheduler!
         var disposeBag: DisposeBag!
         var mainViewModel: MainViewModel!
+        var mockRepository = MockArticleRepository()
         
         beforeSuite {
             disposeBag = DisposeBag()
             scheduler = TestScheduler(initialClock: 0)
-            
-            mainViewModel = MainViewModel(repository: ArticleRepository()) //TODO: napraviti mock za repository
+
+            mainViewModel = MainViewModel(repository: mockRepository) //TODO: napraviti mock za repository
             mainViewModel.initData().disposed(by: disposeBag)
             mainViewModel.initGetingDataFromApi().disposed(by: disposeBag)
             mainViewModel.initSpinnerLogic().disposed(by: disposeBag)
@@ -73,6 +75,12 @@ class MainViewModelTests: QuickSpec {
         
         describe("isFavorites parameter"){
             context("in elements of data field"){
+                
+                stub(mockRepository) { mock in
+                    when(mock.getFavoriteArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "miki", image: "kiki", description: "riki"),Article.init(title: "miki", image: "kiki", description: "riki"),Article.init(title: "miki", image: "kiki", description: "riki")]))
+                    }
+                }
+                
                 it("is set correct"){
                     var isValid = true
                     var favorites: [Article]
@@ -82,7 +90,7 @@ class MainViewModelTests: QuickSpec {
                         favorites = []
                     }
                     mainViewModel.refreshCurrentData.onNext(true)
-                    
+
                     for article in mainViewModel.data{
                         if favorites.contains(where: { favorite -> Bool in
                             favorite.title == article.title
@@ -94,7 +102,6 @@ class MainViewModelTests: QuickSpec {
                     expect(isValid).to(be(true))
                 }
             }
-        }
         
         describe("spinner state"){
             context("on force refresh"){
@@ -122,7 +129,7 @@ class MainViewModelTests: QuickSpec {
 class FavoritesViewModelTests: QuickSpec {
     
     override func spec() {
-        
+        //TREBA MOCKATI PROTOKOL REPOSITORIA!!!! konju.
         var scheduler: TestScheduler!
         var disposeBag: DisposeBag!
         var favoritesViewModel: FavoritesViewModel!
@@ -150,8 +157,7 @@ class FavoritesViewModelTests: QuickSpec {
         describe("favoritesViewModel refresh data"){
             it("refreshing"){
                 favoritesViewModel.refreshData()
-                expect(favoritesViewModel.data.count).to(beTruthy())
-                
+                expect(favoritesViewModel.data.count).to(beGreaterThan(0))
             }
         }
     }
