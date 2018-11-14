@@ -152,7 +152,7 @@ class FavoritesViewModelTests: QuickSpec {
         describe("favoritesViewModel refresh data"){
             it("refreshing"){
                 favoritesViewModel.refreshData()
-                expect(favoritesViewModel.data.count).to(be)
+                expect(favoritesViewModel.data.count).to(beTruthy())
                 
             }
         }
