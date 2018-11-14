@@ -90,6 +90,7 @@ class MainViewModelTests: QuickSpec {
                         }){
                             favoritesInData.append(article)
                             isValid = article.isFavorite
+                            break
                         }
                     }
                     expect(isValid).to(be(true))
@@ -119,3 +120,43 @@ class MainViewModelTests: QuickSpec {
         }
     }
 }
+
+class FavoritesViewModelTests: QuickSpec {
+    
+    override func spec() {
+        
+        var scheduler: TestScheduler!
+        var disposeBag: DisposeBag!
+        var favoritesViewModel: FavoritesViewModel!
+        
+        beforeSuite {
+            disposeBag = DisposeBag()
+            scheduler = TestScheduler(initialClock: 0)
+            
+            favoritesViewModel = FavoritesViewModel(repository: ArticleRepository()) //TODO: napraviti mock za repository
+            favoritesViewModel.initGetingDataFromRepository().disposed(by: disposeBag)
+        }
+        
+        afterSuite {
+            favoritesViewModel = nil
+        }
+        
+        describe("favoritesViewModel created"){
+            context("data"){
+                it("is null"){
+                    expect(favoritesViewModel.data.count).to(be(0))
+                }
+            }
+        }
+        
+        describe("favoritesViewModel refresh data"){
+            it("refreshing"){
+                favoritesViewModel.refreshData()
+                expect(favoritesViewModel.data.count).to(be)
+                
+            }
+        }
+    }
+}
+
+
