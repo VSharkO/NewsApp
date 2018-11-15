@@ -44,24 +44,20 @@ class MainViewModelTests: QuickSpec {
             mainViewModel = nil
         }
         
-        describe("data count value"){
-            context("On start"){
-                it("equals null"){
-                    let testObserver = scheduler.createObserver(Bool.self)
-                    mainViewModel.showSpinner.subscribe(testObserver).disposed(by: disposeBag)
-                    expect(mainViewModel.data.count).to(be(0))
+        describe("Test mainViewModel initialization"){
+            context("initionalized correctly"){
+                it("is not nil"){
+                    expect(mainViewModel).toNot(be(nil))
                 }
-            }
-            context("after refreshing"){
-                it("has changed"){
+                it("data field is filled with data correctly"){
                     mainViewModel.refreshCurrentData.onNext(true)
                     expect(mainViewModel.data.count).to(be(3))
                 }
             }
         }
         
-        describe("spinner state"){
-            context("on force refresh"){
+        describe("spinner logic when getting data"){
+            context("while geting data"){
                 it("is shown"){
                     let showSpinnerSubscription = scheduler.createObserver(Bool.self)
                     mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
@@ -81,9 +77,9 @@ class MainViewModelTests: QuickSpec {
             }
         }
         
-        describe("isFavorites parameter"){
-            context("in elements of data field"){
-                it("is set correct"){
+        describe("Test if favorites in data are set correctly"){
+            context("when data has changed"){
+                it("favorites in data that are in favoritesDB marked as favorites"){
                     var isValid = true
                     var favorites: [Article]
                     do {
@@ -105,66 +101,6 @@ class MainViewModelTests: QuickSpec {
                 }
             }
         }
-        
-        describe("spinner state"){
-            context("on force refresh"){
-                it("is shown"){
-                    let showSpinnerSubscription = scheduler.createObserver(Bool.self)
-                    mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
-                    scheduler.start()
-                    mainViewModel.refreshCurrentData.onNext(true)
-                    expect(showSpinnerSubscription.events.first?.value.element).to(be(true))
-                }
-            }
-            context("after data is set"){
-                it("is hiden"){
-                    let showSpinnerSubscription = scheduler.createObserver(Bool.self)
-                    mainViewModel.showSpinner.subscribe(showSpinnerSubscription).disposed(by: disposeBag)
-                    scheduler.start()
-                    mainViewModel.refreshCurrentData.onNext(true)
-                    expect(showSpinnerSubscription.events.last?.value.element).to(be(false))
-                }
-            }
-        }
     }
 }
-
-class FavoritesViewModelTests: QuickSpec {
-    
-    override func spec() {
-        var disposeBag: DisposeBag!
-        var favoritesViewModel: FavoritesViewModel!
-        let mockRepository = MockArticleRepositoryProtocol()
-        
-        beforeSuite {
-            disposeBag = DisposeBag()
-            favoritesViewModel = FavoritesViewModel(repository: mockRepository)
-            favoritesViewModel.initGetingDataFromRepository().disposed(by: disposeBag)
-            
-            stub(mockRepository) { mock in
-                when(mock.getFavoriteArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true),Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true)]))
-            }
-        }
-        
-        afterSuite {
-            favoritesViewModel = nil
-        }
-        
-        describe("favoritesViewModel created"){
-            context("data"){
-                it("is null"){
-                    expect(favoritesViewModel.data.count).to(be(0))
-                }
-            }
-        }
-        
-        describe("favoritesViewModel refresh data"){
-            it("refreshing"){
-                favoritesViewModel.refreshData()
-                expect(favoritesViewModel.data.count).to(be(2))
-            }
-        }
-    }
-}
-
 

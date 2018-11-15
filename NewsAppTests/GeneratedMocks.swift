@@ -1,4 +1,4 @@
-// MARK: - Mocks generated from file: NewsApp/ArticleRepository/ArticleRepositoryProtocol.swift at 2018-11-15 12:01:41 +0000
+// MARK: - Mocks generated from file: NewsApp/ArticleRepository/ArticleRepositoryProtocol.swift at 2018-11-15 14:01:47 +0000
 
 //
 //  ArticleRepositoryProtocol.swift
