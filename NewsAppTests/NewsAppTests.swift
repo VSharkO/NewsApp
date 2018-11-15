@@ -20,16 +20,24 @@ class MainViewModelTests: QuickSpec {
         var scheduler: TestScheduler!
         var disposeBag: DisposeBag!
         var mainViewModel: MainViewModel!
-        var mockRepository = MockArticleRepository()
+        let mockRepository = MockArticleRepositoryProtocol()
         
         beforeSuite {
             disposeBag = DisposeBag()
             scheduler = TestScheduler(initialClock: 0)
 
-            mainViewModel = MainViewModel(repository: mockRepository) //TODO: napraviti mock za repository
+            mainViewModel = MainViewModel(repository: mockRepository)
             mainViewModel.initData().disposed(by: disposeBag)
             mainViewModel.initGetingDataFromApi().disposed(by: disposeBag)
             mainViewModel.initSpinnerLogic().disposed(by: disposeBag)
+            
+            stub(mockRepository) { mock in
+                when(mock.getArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true),Article.init(title: "siki", image: "wiki", description: "oki"),Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true)]))
+            }
+            
+            stub(mockRepository) { mock in
+                when(mock.getFavoriteArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true),Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true)]))
+            }
         }
         
         afterSuite {
@@ -47,7 +55,7 @@ class MainViewModelTests: QuickSpec {
             context("after refreshing"){
                 it("has changed"){
                     mainViewModel.refreshCurrentData.onNext(true)
-                    expect(mainViewModel.data.count).to(be(10))
+                    expect(mainViewModel.data.count).to(be(3))
                 }
             }
         }
@@ -75,12 +83,6 @@ class MainViewModelTests: QuickSpec {
         
         describe("isFavorites parameter"){
             context("in elements of data field"){
-                
-                stub(mockRepository) { mock in
-                    when(mock.getFavoriteArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "miki", image: "kiki", description: "riki"),Article.init(title: "miki", image: "kiki", description: "riki"),Article.init(title: "miki", image: "kiki", description: "riki")]))
-                    }
-                }
-                
                 it("is set correct"){
                     var isValid = true
                     var favorites: [Article]
@@ -102,6 +104,7 @@ class MainViewModelTests: QuickSpec {
                     expect(isValid).to(be(true))
                 }
             }
+        }
         
         describe("spinner state"){
             context("on force refresh"){
@@ -129,17 +132,18 @@ class MainViewModelTests: QuickSpec {
 class FavoritesViewModelTests: QuickSpec {
     
     override func spec() {
-        //TREBA MOCKATI PROTOKOL REPOSITORIA!!!! konju.
-        var scheduler: TestScheduler!
         var disposeBag: DisposeBag!
         var favoritesViewModel: FavoritesViewModel!
+        let mockRepository = MockArticleRepositoryProtocol()
         
         beforeSuite {
             disposeBag = DisposeBag()
-            scheduler = TestScheduler(initialClock: 0)
-            
-            favoritesViewModel = FavoritesViewModel(repository: ArticleRepository()) //TODO: napraviti mock za repository
+            favoritesViewModel = FavoritesViewModel(repository: mockRepository)
             favoritesViewModel.initGetingDataFromRepository().disposed(by: disposeBag)
+            
+            stub(mockRepository) { mock in
+                when(mock.getFavoriteArticlesFromDb()).thenReturn(Observable.just([Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true),Article.init(title: "ROKI", image: "Rokeri", description: "najjace", isFavorite: true)]))
+            }
         }
         
         afterSuite {
@@ -157,7 +161,7 @@ class FavoritesViewModelTests: QuickSpec {
         describe("favoritesViewModel refresh data"){
             it("refreshing"){
                 favoritesViewModel.refreshData()
-                expect(favoritesViewModel.data.count).to(beGreaterThan(0))
+                expect(favoritesViewModel.data.count).to(be(2))
             }
         }
     }

@@ -23,6 +23,14 @@ struct Article: Codable {
         timeOfCreation = Date().timeIntervalSince1970
     }
     
+    init(title: String, image: String, description : String, isFavorite : Bool) {
+        self.title = title
+        self.urlToImage = image
+        self.description = description
+        self.isFavorite = isFavorite
+        timeOfCreation = Date().timeIntervalSince1970
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case title
         case urlToImage

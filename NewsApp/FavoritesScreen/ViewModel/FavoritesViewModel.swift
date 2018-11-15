@@ -16,7 +16,7 @@ class FavoritesViewModel : FavoritesViewModelProtocol{
     var articleRepository : ArticleRepositoryProtocol!
     var data : [Article] = []
     
-    init(repository: ArticleRepository) {
+    init(repository: ArticleRepositoryProtocol) {
         articleRepository = repository
         loadData.onNext(true)
     }
