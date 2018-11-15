@@ -38,7 +38,6 @@ struct Article: Codable {
     }
 }
 
-
 struct Response: Codable {
     let status: String
     let source: String
