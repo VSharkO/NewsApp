@@ -17,6 +17,15 @@ class MainViewController: UITableViewController,LoaderManager{
     var disposeBag: DisposeBag = DisposeBag()
     var mainCoordinatorDelegate: SingleScreenCoordinatorDelegate?
     
+    init(viewModel: MainViewModelProtocol) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()

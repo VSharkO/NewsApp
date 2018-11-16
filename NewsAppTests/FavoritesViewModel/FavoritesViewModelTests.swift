@@ -35,7 +35,7 @@ class FavoritesViewModelTests: QuickSpec {
             favoritesViewModel = nil
         }
         
-        describe("Test favoritesViewModel initialization"){
+        describe("FavoritesViewModel initialization"){
             context("Initionalized correctly"){
                 it("is not nil"){
                     expect(favoritesViewModel).toNot(be(nil))

@@ -44,19 +44,19 @@ class MainViewModelTests: QuickSpec {
             mainViewModel = nil
         }
         
-        describe("Test mainViewModel initialization"){
-            context("initionalized correctly"){
-                it("is not nil"){
+        describe("MainViewModel initialization"){
+            context("done correctly"){
+                it("instance should not be nil"){
                     expect(mainViewModel).toNot(be(nil))
                 }
-                it("data field is filled with data correctly"){
+                it("data field should be filled with data correctly"){
                     mainViewModel.refreshCurrentData.onNext(true)
                     expect(mainViewModel.data.count).to(be(3))
                 }
             }
         }
         
-        describe("spinner logic when getting data"){
+        describe("spinner"){
             context("while geting data"){
                 it("is shown"){
                     let showSpinnerSubscription = scheduler.createObserver(Bool.self)
@@ -77,9 +77,9 @@ class MainViewModelTests: QuickSpec {
             }
         }
         
-        describe("Test if favorites in data are set correctly"){
+        describe("Favorites in data"){
             context("when data has changed"){
-                it("favorites in data that are in favoritesDB marked as favorites"){
+                it("should be marked as favorites"){
                     var isValid = true
                     var favorites: [Article]
                     do {

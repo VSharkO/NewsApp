@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-class MainScreenCoordinator : Coordinator, SingleScreenCoordinatorDelegate, ParentCoordinatorDelegate{
+class MainScreenCoordinator : Coordinator,SingleScreenCoordinatorDelegate, ParentCoordinatorDelegate{
 
     let controller: MainViewController
     var childCoordinators: [Coordinator] = []
@@ -16,10 +16,7 @@ class MainScreenCoordinator : Coordinator, SingleScreenCoordinatorDelegate, Pare
     
     init(presenter: UINavigationController){
         self.presenter = UINavigationController()
-        let mainViewController = MainViewController()
-        let mainViewModel = MainViewModel(repository: ArticleRepository()) //TODO napraviti repository da bude singleton?
-        mainViewController.viewModel = mainViewModel
-        controller = mainViewController
+        controller = MainViewController(viewModel: MainViewModel(repository: ArticleRepository()))
     }
   
     func start() {
@@ -41,7 +38,6 @@ class MainScreenCoordinator : Coordinator, SingleScreenCoordinatorDelegate, Pare
     func childHasFinished(coordinator: Coordinator){
         removeChildCoordinator(childCoordinator: coordinator)
     }
-    
 }
 
 
