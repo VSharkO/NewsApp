@@ -104,15 +104,6 @@ class MainViewController: UITableViewController,LoaderManager{
                 self.hideLoader()
             }
         }).disposed(by: self.disposeBag)
-        
-        // show/hide Loader
-        viewModel.viewShowSpinner.subscribe(onNext: { [unowned self] showSpinner in
-            if showSpinner{
-                self.displayLoader()
-            }else{
-                self.hideSpinner()
-            }
-        }).disposed(by: self.disposeBag)
     }
     
     func displayLoader() {
